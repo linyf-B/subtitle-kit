@@ -1,0 +1,60 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  title="SRT to plain text — export dialogue"
+  description="Convert SRT subtitles to plain text for translation or script editing. Optional timestamps. Runs in your browser."
+>
+  <h1>SRT to plain text</h1>
+  <p class="lede">
+    Strip timing lines and export readable dialogue. Useful before sending copy to
+    translators or comparing against script drafts.
+  </p>
+
+  <div class="tool-panel">
+    <label for="srt-in">SRT input</label>
+    <textarea id="srt-in"></textarea>
+    <label>
+      <input type="checkbox" id="timestamps" /> Prefix each cue with start time
+    </label>
+    <button type="button" id="run-convert">Convert</button>
+    <label for="text-out" style="margin-top: 1rem">Plain text</label>
+    <textarea id="text-out" readonly></textarea>
+    <button type="button" id="copy-text" class="btn">Copy to clipboard</button>
+  </div>
+
+  <section class="faq">
+    <h2>FAQ</h2>
+    <dl>
+      <dt>Are HTML tags removed?</dt>
+      <dd>
+        Line breaks inside cues are kept. You can flatten them in your editor after
+        export.
+      </dd>
+    </dl>
+  </section>
+</BaseLayout>
+
+<script>
+  import { parseSrt, srtToPlainText } from "../../../lib/srt";
+
+  const input = document.getElementById("srt-in") as HTMLTextAreaElement;
+  const output = document.getElementById("text-out") as HTMLTextAreaElement;
+  const timestamps = document.getElementById("timestamps") as HTMLInputElement;
+
+  document.getElementById("run-convert")?.addEventListener("click", () => {
+    const cues = parseSrt(input.value);
+    output.value = cues.length
+      ? srtToPlainText(cues, {
+          includeSpeaker: timestamps.checked,
+          oneLinePerCue: true,
+        })
+      : "No valid SRT cues found.";
+  });
+
+  document.getElementById("copy-text")?.addEventListener("click", async () => {
+    if (!output.value) return;
+    await navigator.clipboard.writeText(output.value);
+  });
+</script>

@@ -1,0 +1,57 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  title="Read time estimator — voice-over & narration"
+  description="Estimate narration duration from script text using words-per-minute presets (130–180 WPM). Free in-browser calculator."
+>
+  <h1>Read time estimator</h1>
+  <p class="lede">
+    Plan VO length before recording. Enter script text and pick a speaking rate; result is
+    approximate seconds (English-oriented; CJK characters weighted in estimate).
+  </p>
+
+  <div class="tool-panel">
+    <label for="script">Script text</label>
+    <textarea id="script"></textarea>
+    <label for="wpm">Words per minute</label>
+    <select id="wpm">
+      <option value="130">130 — slow / dramatic</option>
+      <option value="150" selected>150 — conversational</option>
+      <option value="170">170 — fast promo</option>
+      <option value="180">180 — rapid fire</option>
+    </select>
+    <button type="button" id="run-estimate">Estimate</button>
+    <p id="estimate-result" style="font-size: 1.25rem; font-weight: 600"></p>
+  </div>
+
+  <section class="faq">
+    <h2>FAQ</h2>
+    <dl>
+      <dt>Is this exact?</dt>
+      <dd>
+        No — pauses, emotion, and language mix change real duration. Use ±15% when
+        booking studio time.
+      </dd>
+    </dl>
+  </section>
+</BaseLayout>
+
+<script>
+  import { estimateDurationSeconds } from "../../../lib/srt";
+
+  const script = document.getElementById("script") as HTMLTextAreaElement;
+  const wpm = document.getElementById("wpm") as HTMLSelectElement;
+  const out = document.getElementById("estimate-result")!;
+
+  document.getElementById("run-estimate")?.addEventListener("click", () => {
+    const sec = estimateDurationSeconds(script.value, parseInt(wpm.value, 10));
+    const m = Math.floor(sec / 60);
+    const s = Math.round(sec % 60);
+    out.textContent =
+      sec < 60
+        ? `About ${Math.round(sec)} seconds`
+        : `About ${m} min ${s} sec (${Math.round(sec)} s total)`;
+  });
+</script>

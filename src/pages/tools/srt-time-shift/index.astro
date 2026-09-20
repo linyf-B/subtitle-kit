@@ -1,0 +1,81 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  title="SRT time shift — offset subtitles online"
+  description="Shift every SRT cue forward or backward by seconds or milliseconds. Free, private, in-browser. No file upload."
+>
+  <h1>SRT time shift</h1>
+  <p class="lede">
+    Paste SRT content, enter an offset (e.g. +500 ms or −1.5 s), download corrected
+    subtitles. Typical use: fix audio sync after re-export.
+  </p>
+
+  <div class="tool-panel" id="srt-shift-app">
+    <label for="srt-in">SRT input</label>
+    <textarea id="srt-in" placeholder="1&#10;00:00:01,000 --> 00:00:04,000&#10;Hello"></textarea>
+    <div class="grid-2">
+      <div>
+        <label for="offset">Offset (seconds, negative allowed)</label>
+        <input type="number" id="offset" step="0.001" value="0.5" />
+      </div>
+      <div>
+        <label for="unit">Unit</label>
+        <select id="unit">
+          <option value="s">Seconds</option>
+          <option value="ms">Milliseconds</option>
+        </select>
+      </div>
+    </div>
+    <button type="button" id="run-shift">Apply shift</button>
+    <label for="srt-out" style="margin-top: 1rem">Result</label>
+    <textarea id="srt-out" readonly></textarea>
+    <button type="button" id="download-srt" class="btn">Download .srt</button>
+  </div>
+
+  <section class="faq">
+    <h2>FAQ</h2>
+    <dl>
+      <dt>How many milliseconds should I shift?</dt>
+      <dd>
+        Play the video with subtitles; nudge in steps of 100–500 ms until lip-sync looks
+        correct. Dubbed tracks often need +200 ms to +800 ms depending on mix.
+      </dd>
+      <dt>Will negative offsets break my file?</dt>
+      <dd>
+        Cues clamp at 00:00:00,000 so times never go below zero.
+      </dd>
+    </dl>
+  </section>
+</BaseLayout>
+
+<script>
+  import { parseSrt, serializeSrt, shiftSrt } from "../../../lib/srt";
+
+  const input = document.getElementById("srt-in") as HTMLTextAreaElement;
+  const offsetEl = document.getElementById("offset") as HTMLInputElement;
+  const unitEl = document.getElementById("unit") as HTMLSelectElement;
+  const output = document.getElementById("srt-out") as HTMLTextAreaElement;
+
+  document.getElementById("run-shift")?.addEventListener("click", () => {
+    const cues = parseSrt(input.value);
+    if (!cues.length) {
+      output.value = "No valid SRT cues found. Check time format (HH:MM:SS,mmm --> ...).";
+      return;
+    }
+    const raw = parseFloat(offsetEl.value) || 0;
+    const offsetMs = unitEl.value === "ms" ? raw : raw * 1000;
+    output.value = serializeSrt(shiftSrt(cues, offsetMs));
+  });
+
+  document.getElementById("download-srt")?.addEventListener("click", () => {
+    if (!output.value.trim()) return;
+    const blob = new Blob([output.value], { type: "text/plain;charset=utf-8" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "shifted.srt";
+    a.click();
+    URL.revokeObjectURL(a.href);
+  });
+</script>

@@ -1,0 +1,59 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  title="Subtitle Kit — Free browser subtitle tools"
+  description="Shift SRT timing, convert SRT to text, check caption line length, and estimate read time. Private: files never leave your device."
+>
+  <p class="badge">No upload · Runs in browser</p>
+  <h1>Subtitle tools for editors & short-form video</h1>
+  <p class="lede">
+    One-line answer: use these free tools to fix SRT timing, export plain text for
+    translation, and keep on-screen captions within safe line lengths — all locally in
+    your browser.
+  </p>
+
+  <ul class="tool-list">
+    <li>
+      <a href="/tools/srt-time-shift/">
+        SRT time shift
+        <span>Offset all cues by milliseconds or seconds (fix drift, sync dubs).</span>
+      </a>
+    </li>
+    <li>
+      <a href="/tools/srt-to-text/">
+        SRT to plain text
+        <span>Export dialogue for translation or script review; optional timestamps.</span>
+      </a>
+    </li>
+    <li>
+      <a href="/tools/line-length/">
+        Caption line length checker
+        <span>See max characters per line; defaults tuned for vertical video.</span>
+      </a>
+    </li>
+    <li>
+      <a href="/tools/read-time/">
+        Read time estimator
+        <span>Estimate VO duration from word count (English WPM presets).</span>
+      </a>
+    </li>
+  </ul>
+
+  <section class="faq">
+    <h2>FAQ</h2>
+    <dl>
+      <dt>Do you upload my subtitle files?</dt>
+      <dd>
+        No. Processing runs entirely in your browser with JavaScript. Nothing is sent to
+        our servers.
+      </dd>
+      <dt>Who is this for?</dt>
+      <dd>
+        Video editors, localization teams, and short-drama creators who need quick SRT
+        fixes without installing desktop software.
+      </dd>
+    </dl>
+  </section>
+</BaseLayout>

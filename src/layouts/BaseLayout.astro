@@ -1,0 +1,245 @@
+---
+const { title, description, canonicalPath = Astro.url.pathname } = Astro.props;
+const site = Astro.site?.origin ?? "https://subtitle-kit.pages.dev";
+const canonical = new URL(canonicalPath, site).href;
+const fullTitle = title.includes("Subtitle Kit") ? title : `${title} | Subtitle Kit`;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta name="robots" content="index, follow" />
+    <title>{fullTitle}</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="logo" href="/">Subtitle Kit</a>
+      <nav aria-label="Main">
+        <a href="/tools/srt-time-shift/">SRT shift</a>
+        <a href="/tools/srt-to-text/">SRT to text</a>
+        <a href="/tools/line-length/">Line length</a>
+        <a href="/tools/read-time/">Read time</a>
+      </nav>
+    </header>
+    <main class="site-main">
+      <slot />
+    </main>
+    <aside class="ad-slot ad-slot--footer" aria-label="Ad placeholder">
+      <p>Ad space — connect AdSense after you have steady traffic.</p>
+    </aside>
+    <footer class="site-footer">
+      <p>All tools run in your browser. Files are not uploaded.</p>
+      <p>
+        <a href="/privacy/">Privacy</a>
+        ·
+        <a href="/about/">About</a>
+      </p>
+    </footer>
+  </body>
+</html>
+
+<style is:global>
+  :root {
+    color-scheme: light dark;
+    --bg: #0f1419;
+    --surface: #1a2332;
+    --text: #e7ecf3;
+    --muted: #9aa8bc;
+    --accent: #5eb8ff;
+    --border: #2a3648;
+    font-family: "Segoe UI", system-ui, sans-serif;
+    line-height: 1.55;
+  }
+  @media (prefers-color-scheme: light) {
+    :root {
+      --bg: #f4f6f9;
+      --surface: #fff;
+      --text: #1a2332;
+      --muted: #5a677a;
+      --accent: #0066cc;
+      --border: #d8dee8;
+    }
+  }
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background: var(--bg);
+    color: var(--text);
+    display: flex;
+    flex-direction: column;
+  }
+  a {
+    color: var(--accent);
+  }
+  .site-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem 1.5rem;
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+  }
+  .logo {
+    font-weight: 700;
+    text-decoration: none;
+    color: var(--text);
+  }
+  .site-header nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 1rem;
+    font-size: 0.9rem;
+  }
+  .site-header nav a {
+    text-decoration: none;
+  }
+  .site-main {
+    flex: 1;
+    width: min(720px, 100%);
+    margin: 0 auto;
+    padding: 1.5rem 1.25rem 2rem;
+  }
+  .site-footer {
+    padding: 1.25rem;
+    text-align: center;
+    font-size: 0.85rem;
+    color: var(--muted);
+    border-top: 1px solid var(--border);
+  }
+  .ad-slot {
+    max-width: 720px;
+    margin: 0 auto 1rem;
+    padding: 0.75rem 1rem;
+    border: 1px dashed var(--border);
+    border-radius: 8px;
+    font-size: 0.8rem;
+    color: var(--muted);
+    text-align: center;
+  }
+  h1 {
+    font-size: 1.65rem;
+    line-height: 1.25;
+    margin-top: 0;
+  }
+  .lede {
+    color: var(--muted);
+    font-size: 1.05rem;
+  }
+  .tool-panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.25rem;
+    margin: 1.5rem 0;
+  }
+  label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.35rem;
+    font-size: 0.9rem;
+  }
+  input[type="text"],
+  input[type="number"],
+  textarea,
+  select {
+    width: 100%;
+    padding: 0.6rem 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--bg);
+    color: var(--text);
+    font: inherit;
+  }
+  textarea {
+    min-height: 160px;
+    font-family: ui-monospace, monospace;
+    font-size: 0.85rem;
+  }
+  button,
+  .btn {
+    margin-top: 0.75rem;
+    padding: 0.55rem 1rem;
+    border: none;
+    border-radius: 8px;
+    background: var(--accent);
+    color: #fff;
+    font-weight: 600;
+    cursor: pointer;
+    font: inherit;
+  }
+  @media (prefers-color-scheme: light) {
+    button,
+    .btn {
+      color: #fff;
+    }
+  }
+  .grid-2 {
+    display: grid;
+    gap: 1rem;
+  }
+  @media (min-width: 540px) {
+    .grid-2 {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .faq {
+    margin-top: 2rem;
+  }
+  .faq h2 {
+    font-size: 1.15rem;
+  }
+  .faq dt {
+    font-weight: 600;
+    margin-top: 1rem;
+  }
+  .faq dd {
+    margin: 0.35rem 0 0;
+    color: var(--muted);
+  }
+  .tool-list {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: 0.75rem;
+  }
+  .tool-list a {
+    display: block;
+    padding: 1rem 1.1rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    text-decoration: none;
+    color: var(--text);
+  }
+  .tool-list a:hover {
+    border-color: var(--accent);
+  }
+  .tool-list span {
+    display: block;
+    color: var(--muted);
+    font-size: 0.9rem;
+    margin-top: 0.25rem;
+  }
+  .badge {
+    display: inline-block;
+    font-size: 0.75rem;
+    padding: 0.15rem 0.5rem;
+    border-radius: 999px;
+    background: var(--border);
+    color: var(--muted);
+    margin-bottom: 0.5rem;
+  }
+</style>

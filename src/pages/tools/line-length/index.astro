@@ -1,0 +1,63 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  title="Caption line length checker — vertical video"
+  description="Check max characters per subtitle line. Compare against common 9:16 safe limits (42 chars guidance). Browser-only."
+>
+  <h1>Caption line length checker</h1>
+  <p class="lede">
+    Short-form platforms punish unreadable stacks of text. This tool reports the longest
+    line in your caption block and flags lines over your limit.
+  </p>
+
+  <div class="tool-panel">
+    <label for="caption">Caption text (one block or multiline)</label>
+    <textarea id="caption" placeholder="Line one&#10;Line two"></textarea>
+    <label for="limit">Max characters per line (default 42 for vertical video)</label>
+    <input type="number" id="limit" value="42" min="10" max="120" />
+    <button type="button" id="run-check">Check lines</button>
+    <p id="result" style="margin-top: 1rem"></p>
+    <ul id="violations"></ul>
+  </div>
+
+  <section class="faq">
+    <h2>Reference</h2>
+    <dl>
+      <dt>Why 42 characters?</dt>
+      <dd>
+        Many editors use ~32–42 Latin characters per line on 9:16 to avoid edge clipping
+        and two-line stacks. Adjust the limit to match your template font size.
+      </dd>
+    </dl>
+  </section>
+</BaseLayout>
+
+<script>
+  import { maxLineLength } from "../../../lib/srt";
+
+  const caption = document.getElementById("caption") as HTMLTextAreaElement;
+  const limitEl = document.getElementById("limit") as HTMLInputElement;
+  const result = document.getElementById("result")!;
+  const violations = document.getElementById("violations")!;
+
+  document.getElementById("run-check")?.addEventListener("click", () => {
+    const { max, lines } = maxLineLength(caption.value);
+    const limit = parseInt(limitEl.value, 10) || 42;
+    result.textContent = `Longest line: ${max} characters (${lines.length} line(s) total). Limit: ${limit}.`;
+    violations.innerHTML = "";
+    lines.forEach((line, i) => {
+      if ([...line].length > limit) {
+        const li = document.createElement("li");
+        li.textContent = `Line ${i + 1}: ${[...line].length} chars — ${line.slice(0, 60)}${line.length > 60 ? "…" : ""}`;
+        violations.appendChild(li);
+      }
+    });
+    if (!violations.children.length) {
+      const ok = document.createElement("li");
+      ok.textContent = "All lines within limit.";
+      violations.appendChild(ok);
+    }
+  });
+</script>
