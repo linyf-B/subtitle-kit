@@ -1,15 +1,52 @@
 ---
 import BaseLayout from "../../../layouts/BaseLayout.astro";
+import SeoToolExtras from "../../../components/SeoToolExtras.astro";
+
+const faqs = [
+  {
+    question: "What speaking rate should I use?",
+    answer:
+      "Conversational English is often 140–160 words per minute. Slow narration 120–130 WPM; fast promo reads 170–180 WPM.",
+  },
+  {
+    question: "How accurate is the estimate?",
+    answer:
+      "It is a planning guide only. Pauses, emphasis, and retakes change studio time—budget ±15%.",
+  },
+  {
+    question: "Does Chinese text work?",
+    answer:
+      "The calculator weights CJK characters roughly as half a word each alongside space-separated words. Mixed scripts are approximate.",
+  },
+  {
+    question: "Is my script sent to a server?",
+    answer:
+      "No. The estimate runs entirely in your browser.",
+  },
+  {
+    question: "Why estimate read time for subtitles?",
+    answer:
+      "Voice-over and dubbing need to match slot lengths; estimating duration before recording reduces re-takes on short-form episodes.",
+  },
+];
+
+const steps = [
+  "Paste narration or subtitle script text.",
+  "Select a words-per-minute preset matching your delivery style.",
+  "Click Estimate and use the seconds/minutes result for scheduling.",
+];
 ---
 
 <BaseLayout
   title="Read time estimator — voice-over & narration"
   description="Estimate narration duration from script text using words-per-minute presets (130–180 WPM). Free in-browser calculator."
+  canonicalPath="/tools/read-time/"
 >
+  <p class="badge">No upload to server · Runs in browser</p>
   <h1>Read time estimator</h1>
   <p class="lede">
-    Plan VO length before recording. Enter script text and pick a speaking rate; result is
-    approximate seconds (English-oriented; CJK characters weighted in estimate).
+    Plan voice-over length before you record—pick a speaking rate and get approximate duration
+    in seconds or minutes.
   </p>
 
   <div class="tool-panel">
@@ -26,16 +63,13 @@ import BaseLayout from "../../../layouts/BaseLayout.astro";
     <p id="estimate-result" style="font-size: 1.25rem; font-weight: 600"></p>
   </div>
 
-  <section class="faq">
-    <h2>FAQ</h2>
-    <dl>
-      <dt>Is this exact?</dt>
-      <dd>
-        No — pauses, emotion, and language mix change real duration. Use ±15% when
-        booking studio time.
-      </dd>
-    </dl>
-  </section>
+  <SeoToolExtras
+    faqs={faqs}
+    toolName="Read Time Estimator"
+    toolDescription="Estimate voice-over duration from script text using adjustable words per minute."
+    path="/tools/read-time/"
+    steps={steps}
+  />
 </BaseLayout>
 
 <script>

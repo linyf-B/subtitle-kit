@@ -61,11 +61,12 @@ export function serializeSrt(cues: SrtCue[]): string {
 }
 
 export function shiftSrt(cues: SrtCue[], offsetMs: number): SrtCue[] {
-  return cues.map((c) => ({
-    ...c,
-    startMs: Math.max(0, c.startMs + offsetMs),
-    endMs: Math.max(0, c.endMs + offsetMs),
-  }));
+  return cues.map((c) => {
+    let startMs = Math.max(0, c.startMs + offsetMs);
+    let endMs = Math.max(0, c.endMs + offsetMs);
+    if (endMs < startMs) endMs = startMs;
+    return { ...c, startMs, endMs };
+  });
 }
 
 export function srtToPlainText(

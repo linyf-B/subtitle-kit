@@ -1,23 +1,63 @@
 ---
 import BaseLayout from "../../../layouts/BaseLayout.astro";
+import SeoToolExtras from "../../../components/SeoToolExtras.astro";
+
+const faqs = [
+  {
+    question: "How do I fix subtitles that are out of sync?",
+    answer:
+      "When every line is early or late by the same amount, shift all cues by a fixed offset. Play the video, estimate the error (often 200–800 ms for dubs), apply the shift, and download a new SRT file.",
+  },
+  {
+    question: "Is my SRT file uploaded to your server?",
+    answer:
+      "No. Files are read in your browser with JavaScript. Nothing is sent to Subtitle Kit servers.",
+  },
+  {
+    question: "Can I shift by milliseconds?",
+    answer:
+      "Yes. Choose milliseconds in the unit dropdown and enter values such as 500 or -300 for fine lip-sync.",
+  },
+  {
+    question: "What happens with a large negative shift?",
+    answer:
+      "Timestamps clamp at zero so cues never go negative. If a cue would invert, the end time is adjusted to stay valid.",
+  },
+  {
+    question: "Which subtitle format is supported?",
+    answer:
+      "Standard SubRip (.srt) with comma milliseconds (HH:MM:SS,mmm --> HH:MM:SS,mmm). Paste text or open a .srt file from your device.",
+  },
+];
+
+const steps = [
+  "Paste SRT text or choose a .srt file from your computer.",
+  "Enter offset in seconds or milliseconds (negative moves subtitles earlier).",
+  "Click Apply shift, preview the result, then Download .srt.",
+];
 ---
 
 <BaseLayout
   title="SRT time shift — offset subtitles online"
-  description="Shift every SRT cue forward or backward by seconds or milliseconds. Free, private, in-browser. No file upload."
+  description="Shift every SRT cue forward or backward by seconds or milliseconds. Free, private, in-browser. Upload or paste SRT."
+  canonicalPath="/tools/srt-time-shift/"
 >
+  <p class="badge">No upload to server · Runs in browser</p>
   <h1>SRT time shift</h1>
   <p class="lede">
-    Paste SRT content, enter an offset (e.g. +500 ms or −1.5 s), download corrected
-    subtitles. Typical use: fix audio sync after re-export.
+    Fix constant subtitle delay: shift all cues together by seconds or milliseconds,
+    then download a corrected .srt file. Ideal after re-export or dubbing.
   </p>
 
   <div class="tool-panel" id="srt-shift-app">
+    <label for="srt-file">Open .srt file (optional)</label>
+    <input type="file" id="srt-file" accept=".srt,text/plain" />
+    <p class="hint">Or paste content below. Processing stays on your device.</p>
     <label for="srt-in">SRT input</label>
     <textarea id="srt-in" placeholder="1&#10;00:00:01,000 --> 00:00:04,000&#10;Hello"></textarea>
     <div class="grid-2">
       <div>
-        <label for="offset">Offset (seconds, negative allowed)</label>
+        <label for="offset">Offset (negative allowed)</label>
         <input type="number" id="offset" step="0.001" value="0.5" />
       </div>
       <div>
@@ -34,29 +74,42 @@ import BaseLayout from "../../../layouts/BaseLayout.astro";
     <button type="button" id="download-srt" class="btn">Download .srt</button>
   </div>
 
-  <section class="faq">
-    <h2>FAQ</h2>
-    <dl>
-      <dt>How many milliseconds should I shift?</dt>
-      <dd>
-        Play the video with subtitles; nudge in steps of 100–500 ms until lip-sync looks
-        correct. Dubbed tracks often need +200 ms to +800 ms depending on mix.
-      </dd>
-      <dt>Will negative offsets break my file?</dt>
-      <dd>
-        Cues clamp at 00:00:00,000 so times never go below zero.
-      </dd>
-    </dl>
-  </section>
+  <div class="prose-block">
+    <h2>When to use a fixed time shift</h2>
+    <p>
+      A constant offset fixes subtitles that are uniformly early or late—common after frame-rate
+      changes, player delay, or dubbed audio. Typical adjustments: +0.2 s to +0.8 s for delayed
+      subs, negative values if text appears before dialogue.
+    </p>
+  </div>
+
+  <SeoToolExtras
+    faqs={faqs}
+    toolName="SRT Time Shift"
+    toolDescription="Shift all SRT subtitle timestamps forward or backward in the browser without uploading files."
+    path="/tools/srt-time-shift/"
+    steps={steps}
+  />
 </BaseLayout>
 
 <script>
   import { parseSrt, serializeSrt, shiftSrt } from "../../../lib/srt";
 
   const input = document.getElementById("srt-in") as HTMLTextAreaElement;
+  const fileInput = document.getElementById("srt-file") as HTMLInputElement;
   const offsetEl = document.getElementById("offset") as HTMLInputElement;
   const unitEl = document.getElementById("unit") as HTMLSelectElement;
   const output = document.getElementById("srt-out") as HTMLTextAreaElement;
+
+  fileInput?.addEventListener("change", () => {
+    const file = fileInput.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      input.value = String(reader.result ?? "");
+    };
+    reader.readAsText(file);
+  });
 
   document.getElementById("run-shift")?.addEventListener("click", () => {
     const cues = parseSrt(input.value);

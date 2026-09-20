@@ -1,15 +1,51 @@
 ---
 import BaseLayout from "../../../layouts/BaseLayout.astro";
+import SeoToolExtras from "../../../components/SeoToolExtras.astro";
+
+const faqs = [
+  {
+    question: "How many characters per line for TikTok or Reels?",
+    answer:
+      "Many editors target 32–42 Latin characters per line on 9:16 video so text does not cover faces or safe zones. Increase the limit if you use larger fonts.",
+  },
+  {
+    question: "Does this tool edit my video?",
+    answer:
+      "No. It only analyzes pasted caption text and reports line lengths.",
+  },
+  {
+    question: "How is line length counted?",
+    answer:
+      "Each line break starts a new line. Character count uses Unicode code points (emoji count as multiple code units in some fonts—treat results as guidance).",
+  },
+  {
+    question: "Can I check an entire SRT file?",
+    answer:
+      "Paste dialogue lines or export text from our SRT to text tool, then run the checker here.",
+  },
+  {
+    question: "Why do platforms care about line length?",
+    answer:
+      "Long lines wrap into tall blocks that block visuals and reduce retention on short-form feeds.",
+  },
+];
+
+const steps = [
+  "Paste caption or subtitle lines (one or many lines).",
+  "Set your max characters per line (default 42 for vertical video).",
+  "Click Check lines and fix any lines flagged over the limit.",
+];
 ---
 
 <BaseLayout
   title="Caption line length checker — vertical video"
   description="Check max characters per subtitle line. Compare against common 9:16 safe limits (42 chars guidance). Browser-only."
+  canonicalPath="/tools/line-length/"
 >
+  <p class="badge">No upload to server · Runs in browser</p>
   <h1>Caption line length checker</h1>
   <p class="lede">
-    Short-form platforms punish unreadable stacks of text. This tool reports the longest
-    line in your caption block and flags lines over your limit.
+    Find lines that are too long for vertical short-form video before you burn in subtitles.
   </p>
 
   <div class="tool-panel">
@@ -22,16 +58,22 @@ import BaseLayout from "../../../layouts/BaseLayout.astro";
     <ul id="violations"></ul>
   </div>
 
-  <section class="faq">
-    <h2>Reference</h2>
-    <dl>
-      <dt>Why 42 characters?</dt>
-      <dd>
-        Many editors use ~32–42 Latin characters per line on 9:16 to avoid edge clipping
-        and two-line stacks. Adjust the limit to match your template font size.
-      </dd>
-    </dl>
-  </section>
+  <div class="prose-block">
+    <h2>Safe line length reference</h2>
+    <p>
+      For 1080×1920 captions, teams often keep <strong>32–42 characters</strong> per line in
+      Latin scripts. CJK lines may use fewer glyphs because each character reads wider. Adjust
+      the limit to match your font size and platform safe margins.
+    </p>
+  </div>
+
+  <SeoToolExtras
+    faqs={faqs}
+    toolName="Caption Line Length Checker"
+    toolDescription="Check subtitle line character counts for vertical and short-form video captions."
+    path="/tools/line-length/"
+    steps={steps}
+  />
 </BaseLayout>
 
 <script>

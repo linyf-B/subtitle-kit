@@ -1,0 +1,68 @@
+---
+export interface FaqItem {
+  question: string;
+  answer: string;
+}
+
+interface Props {
+  faqs: FaqItem[];
+  toolName: string;
+  toolDescription: string;
+  path: string;
+  steps?: string[];
+}
+
+const { faqs, toolName, toolDescription, path, steps = [] } = Astro.props;
+const site = Astro.site?.origin ?? "https://subtitle-kit.pages.dev";
+const toolUrl = new URL(path, site).href;
+
+const faqJson = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((f) => ({
+    "@type": "Question",
+    name: f.question,
+    acceptedAnswer: { "@type": "Answer", text: f.answer },
+  })),
+};
+
+const appJson = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  name: toolName,
+  description: toolDescription,
+  url: toolUrl,
+  applicationCategory: "MultimediaApplication",
+  operatingSystem: "Any",
+  browserRequirements: "Requires JavaScript",
+  offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+};
+---
+
+{
+  steps.length > 0 && (
+    <section class="how-to">
+      <h2>How to use</h2>
+      <ol>
+        {steps.map((step) => (
+          <li>{step}</li>
+        ))}
+      </ol>
+    </section>
+  )
+}
+
+<section class="faq">
+  <h2>Frequently asked questions</h2>
+  <dl>
+    {faqs.map((f) => (
+      <>
+        <dt>{f.question}</dt>
+        <dd>{f.answer}</dd>
+      </>
+    ))}
+  </dl>
+</section>
+
+<script type="application/ld+json" set:html={JSON.stringify(faqJson)} />
+<script type="application/ld+json" set:html={JSON.stringify(appJson)} />

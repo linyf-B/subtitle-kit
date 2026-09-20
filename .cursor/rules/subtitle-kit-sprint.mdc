@@ -1,0 +1,10 @@
+---
+description: subtitle-kit 专属 — 用户说「继续」时走 sprint skill，勿用于其他仓库
+alwaysApply: true
+---
+
+# subtitle-kit 项目边界
+
+- 本规则**仅**存在于 **subtitle-kit** 仓库；daily sprint 只服务 [subtitle-kit.pages.dev](https://subtitle-kit.pages.dev)。
+- 用户说 **继续** / **今日 sprint** 时：读取并执行 [.cursor/skills/subtitle-kit-continue/SKILL.md](../skills/subtitle-kit-continue/SKILL.md)（先过 skill §0 校验 `docs/sprint-state.json`）。
+- 若对话主题已是其他 repo（无 subtitle-kit 根目录），不要套用本 sprint，避免误执行。

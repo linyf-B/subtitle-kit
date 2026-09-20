@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "sprintStart": "2026-09-20",
+  "siteUrl": "https://subtitle-kit.pages.dev",
+  "gscPropertyUrl": "https://search.google.com/search-console?resource_id=https%3A%2F%2Fsubtitle-kit.pages.dev%2F&after_verification_success=",
+  "completedTaskIds": [],
+  "guidesDone": ["fix-subtitle-sync-constant-delay"],
+  "redditPosts": 0,
+  "directorySubmits": 0,
+  "phLaunched": false,
+  "phPath": "A",
+  "lastMetrics": {
+    "date": "2026-09-20",
+    "uv28d": null,
+    "gscImpressions28d": null,
+    "gscClicks28d": null,
+    "indexedPages": null,
+    "source": "2026-09-20: live 站 curl 200 OK；Cursor 内置浏览器 GSC 导航失败(chrome-error)，待用户登录 GSC 后补数"
+  },
+  "weeklyLog": [],
+  "notes": "Day1: 已本地新增 guide fix-subtitle-sync-constant-delay + build。大量改动未 push（见 git status）。"
+}

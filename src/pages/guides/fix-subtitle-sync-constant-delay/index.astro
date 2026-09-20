@@ -1,0 +1,169 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import SeoToolExtras from "../../../components/SeoToolExtras.astro";
+
+const faqs = [
+  {
+    question: "How do I know if my subtitles need a constant delay fix?",
+    answer:
+      "Play from the start of a dialogue line. If every cue is early or late by roughly the same amount—for example always 0.4 seconds behind the dub—the problem is a global offset, not wrong individual cues.",
+  },
+  {
+    question: "Should I fix sync in my editor or with an SRT shift tool?",
+    answer:
+      "NLE subtitle tracks are fine for one project. When you export SRT for YouTube, a client, or another platform, a dedicated offset pass is faster and repeatable. Shift the file once, then re-import.",
+  },
+  {
+    question: "What offset values are typical for dubbed video?",
+    answer:
+      "Many dubs need +200 ms to +800 ms. Short-form vertical video sometimes needs less. Measure with one line, adjust, and re-check two more scenes before batching.",
+  },
+  {
+    question: "Will shifting break my timecodes at zero?",
+    answer:
+      "Good tools clamp cues at 00:00:00,000 so nothing goes negative. Very large negative shifts can shorten the first cue; preview before publishing.",
+  },
+  {
+    question: "Is it safe to upload my SRT to an online shifter?",
+    answer:
+      "Prefer in-browser tools that never send files to a server. Subtitle Kit processes SRT locally in JavaScript so scripts stay on your device.",
+  },
+  {
+    question: "Can frame rate changes cause constant subtitle delay?",
+    answer:
+      "Yes. Converting 24 fps to 25 fps or re-wrapping for streaming can shift every cue equally. A fixed millisecond offset often fixes the whole file after export.",
+  },
+];
+
+const steps = [
+  "Confirm the error is constant: check three lines at different timestamps.",
+  "Estimate offset in seconds or milliseconds (positive if subs appear late).",
+  "Apply the shift to the full SRT, preview in your player, then export.",
+];
+---
+
+<BaseLayout
+  title="Fix subtitle sync with a constant delay (SRT guide)"
+  description="Learn to diagnose uniform subtitle lag and fix it with a fixed SRT time shift. Step-by-step for editors, dubbing, and short-form video."
+  canonicalPath="/guides/fix-subtitle-sync-constant-delay/"
+>
+  <p class="badge">Guide · ~8 min read</p>
+  <h1>Fix subtitle sync when every line is early or late by the same amount</h1>
+  <p class="lede">
+    Constant delay is the most common subtitle sync issue after export, dubbing, or player delay.
+    This guide shows how to measure the offset, apply one shift to the whole SRT file, and verify
+    lip-sync without re-timing cue by cue.
+  </p>
+
+  <div class="prose-block">
+    <h2>Constant delay vs. drift</h2>
+    <p>
+      Before you edit hundreds of cues, decide which problem you have. <strong>Constant delay</strong>
+      means cue 1, cue 50, and cue 200 are all wrong by about the same interval—often 0.3 to 0.7
+      seconds. <strong>Drift</strong> means the error grows over time (0.1 s at the start, 2 s by the
+      end). Drift usually needs frame-rate or re-transcode work; constant delay needs a single offset
+      applied to every timestamp in the SubRip file.
+    </p>
+    <p>
+      Quick test: pause on three unrelated lines (opening, middle, end). If each line is late by
+      similar lip-sync gap, you are in the constant-delay camp. If the gap widens, stop here and fix
+      source timing or FPS in your editor first.
+    </p>
+
+    <h2>Common causes in real projects</h2>
+    <ul>
+      <li><strong>Dubbed audio</strong> — dialogue was replaced but subtitles were not re-aligned.</li>
+      <li><strong>Platform export</strong> — YouTube, TikTok, or Premiere exported SRT from a timeline with preroll or black.</li>
+      <li><strong>Player buffering</strong> — some players start video before subtitles; test in VLC or DaVinci with the same file.</li>
+      <li><strong>Frame-rate conversion</strong> — 23.976 ↔ 25 fps can shift all cues equally if subtitles were not regenerated.</li>
+      <li><strong>Re-used SRT</strong> — subtitles from a rough cut applied to the final picture lock.</li>
+    </ul>
+
+    <h2>Measure the offset (manual method)</h2>
+    <ol>
+      <li>Open the video in a player that shows milliseconds or allows frame stepping.</li>
+      <li>Find when the spoken word starts (not the breath before it).</li>
+      <li>Find when the subtitle line appears on screen.</li>
+      <li>Subtract: if text appears <em>after</em> speech, subtitles are late— you need a <strong>positive</strong> shift (move cues later). If text flashes before speech, use a <strong>negative</strong> shift.</li>
+    </ol>
+    <p>
+      Example: speech starts at 00:01:02,400 and the subtitle appears at 00:01:02,900. The text is
+      500 ms late, so shift all cues by <strong>+500 ms</strong> (or +0.5 s).
+    </p>
+
+    <h2>Apply one shift to the entire SRT</h2>
+    <p>
+      SubRip format stores each cue as <code>HH:MM:SS,mmm --> HH:MM:SS,mmm</code>. A global shift adds
+      the same milliseconds to every start and end time. You can do this in a spreadsheet or script,
+      but a browser tool is faster for one-off fixes: paste or open the .srt, enter offset, download
+      the corrected file.
+    </p>
+    <p>
+      Use our free <a href="/tools/srt-time-shift/">SRT time shift tool</a>—it runs locally, supports
+      seconds and milliseconds, and clamps at zero so timestamps stay valid. After download, re-import
+      into your NLE or upload to your platform.
+    </p>
+
+    <h2>Verification checklist</h2>
+    <table>
+      <thead>
+        <tr><th>Step</th><th>What to check</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>1</td><td>First spoken line after any intro card</td></tr>
+        <tr><td>2</td><td>Fast dialogue in the middle of the clip</td></tr>
+        <tr><td>3</td><td>Last line before credits (long files)</td></tr>
+        <tr><td>4</td><td>On-screen line length still readable (see <a href="/tools/line-length/">line length checker</a>)</td></tr>
+      </tbody>
+    </table>
+    <p>
+      If only one scene is wrong after a global shift, that scene may have been edited separately—fix
+      those cues locally rather than changing the global offset again.
+    </p>
+
+    <h2>When not to use a global shift</h2>
+    <p>
+      Mixed-language cuts, jump cuts with deleted dialogue, or subtitles authored against the wrong
+      audio track need cue-level edits. For translation handoff, you may also want plain dialogue text:
+      use <a href="/tools/srt-to-text/">SRT to text</a> to strip timecodes before sending to a
+      translator, then re-time after recording.
+    </p>
+
+    <h2>Workflow summary</h2>
+    <p>
+      Diagnose constant vs. drift → measure one reliable offset → shift entire file → spot-check three
+      moments → publish. Most editors finish in under ten minutes once they stop tweaking individual
+      cues.
+    </p>
+  </div>
+
+  <p class="cta-row">
+    <a class="btn" href="/tools/srt-time-shift/">Open SRT time shift tool</a>
+  </p>
+
+  <SeoToolExtras
+    faqs={faqs}
+    toolName="Fix subtitle sync (constant delay)"
+    toolDescription="Guide and browser tool to shift all SRT cues by a fixed offset for dubbing and export fixes."
+    path="/guides/fix-subtitle-sync-constant-delay/"
+    steps={steps}
+  />
+</BaseLayout>
+
+<style>
+  .cta-row {
+    margin: 1.5rem 0 2rem;
+  }
+  .prose-block table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+    font-size: 0.95rem;
+  }
+  .prose-block th,
+  .prose-block td {
+    border: 1px solid #334155;
+    padding: 0.5rem 0.75rem;
+    text-align: left;
+  }
+</style>

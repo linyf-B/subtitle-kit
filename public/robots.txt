@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://subtitle-kit.pages.dev/sitemap-index.xml

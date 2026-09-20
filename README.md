@@ -1,7 +1,11 @@
 # Subtitle Kit
 
-面向剪辑/短剧/字幕工作流的 **浏览器本地工具站**（英文 SEO），可 **零域名** 部署到 Cloudflare Pages。
+**Live site:** [https://subtitle-kit.pages.dev](https://subtitle-kit.pages.dev)  
+**Repository:** [github.com/linyf-B/subtitle-kit](https://github.com/linyf-B/subtitle-kit)
 
+**系统计划（0 → $50/日）：** [docs/PLAN-50USD-DAY.md](./docs/PLAN-50USD-DAY.md) · **30 天先做：** [docs/PLAN-30DAY-SPRINT.md](./docs/PLAN-30DAY-SPRINT.md) · 外链：[docs/seo-outreach.md](./docs/seo-outreach.md)
+
+面向剪辑/短剧/字幕工作流的 **浏览器本地工具站**（英文 SEO），可 **零域名** 部署到 Cloudflare Pages。
 ## 本地预览
 
 ```powershell
@@ -75,8 +79,13 @@ npm run dev
 
 ## 变现预留
 
-- 页脚与 layout 里已有 **广告占位**；有稳定流量后再申请 AdSense 等，把脚本放进 `BaseLayout.astro` 或单独组件。
-- 后续可加：批量处理限额 → 低价订阅（需再加后端或 Stripe，MVP 未包含）。
+- 页脚与 layout 里已有 **广告占位**；建议 **日访问稳定后** 再申请 [Google AdSense](https://www.google.com/adsense/)，将脚本放入 `BaseLayout.astro` 的广告区域。
+- About 页已说明可能展示广告（AdSense 审核常用）。
+- 后续可加：批量限额 → 低价订阅（需 Stripe + 后端，当前未包含）。
+
+## 开源
+
+MIT License — 见 [LICENSE](./LICENSE)。
 
 ## 工具列表
 

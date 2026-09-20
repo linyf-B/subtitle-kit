@@ -1,18 +1,57 @@
 ---
 import BaseLayout from "../../../layouts/BaseLayout.astro";
+import SeoToolExtras from "../../../components/SeoToolExtras.astro";
+
+const faqs = [
+  {
+    question: "Why convert SRT to plain text?",
+    answer:
+      "Translators and script editors often need dialogue without timing codes. Plain text is easier to paste into CAT tools, Google Docs, or revision tables.",
+  },
+  {
+    question: "Are timestamps included?",
+    answer:
+      "Optional. Check “Prefix each cue with start time” to export lines like [00:00:01,000] dialogue for reference.",
+  },
+  {
+    question: "Is content uploaded to a server?",
+    answer:
+      "No. Conversion runs locally in your browser.",
+  },
+  {
+    question: "Does this remove formatting tags?",
+    answer:
+      "Timing lines are removed. Text inside cues is kept; line breaks can be flattened to one line per cue.",
+  },
+  {
+    question: "Can I open a .srt file?",
+    answer:
+      "Yes. Use the file picker or paste SubRip content into the text area.",
+  },
+];
+
+const steps = [
+  "Paste SRT or open a .srt file.",
+  "Choose whether to include start timestamps on each line.",
+  "Click Convert, then copy or save the plain text.",
+];
 ---
 
 <BaseLayout
   title="SRT to plain text — export dialogue"
   description="Convert SRT subtitles to plain text for translation or script editing. Optional timestamps. Runs in your browser."
+  canonicalPath="/tools/srt-to-text/"
 >
+  <p class="badge">No upload to server · Runs in browser</p>
   <h1>SRT to plain text</h1>
   <p class="lede">
-    Strip timing lines and export readable dialogue. Useful before sending copy to
-    translators or comparing against script drafts.
+    Export subtitle dialogue without timing rows—ready for translation, proofreading, or script
+    comparison.
   </p>
 
   <div class="tool-panel">
+    <label for="srt-file">Open .srt file (optional)</label>
+    <input type="file" id="srt-file" accept=".srt,text/plain" />
     <label for="srt-in">SRT input</label>
     <textarea id="srt-in"></textarea>
     <label>
@@ -24,24 +63,32 @@ import BaseLayout from "../../../layouts/BaseLayout.astro";
     <button type="button" id="copy-text" class="btn">Copy to clipboard</button>
   </div>
 
-  <section class="faq">
-    <h2>FAQ</h2>
-    <dl>
-      <dt>Are HTML tags removed?</dt>
-      <dd>
-        Line breaks inside cues are kept. You can flatten them in your editor after
-        export.
-      </dd>
-    </dl>
-  </section>
+  <SeoToolExtras
+    faqs={faqs}
+    toolName="SRT to Plain Text"
+    toolDescription="Convert SRT subtitles to plain dialogue text in the browser."
+    path="/tools/srt-to-text/"
+    steps={steps}
+  />
 </BaseLayout>
 
 <script>
   import { parseSrt, srtToPlainText } from "../../../lib/srt";
 
   const input = document.getElementById("srt-in") as HTMLTextAreaElement;
+  const fileInput = document.getElementById("srt-file") as HTMLInputElement;
   const output = document.getElementById("text-out") as HTMLTextAreaElement;
   const timestamps = document.getElementById("timestamps") as HTMLInputElement;
+
+  fileInput?.addEventListener("change", () => {
+    const file = fileInput.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      input.value = String(reader.result ?? "");
+    };
+    reader.readAsText(file);
+  });
 
   document.getElementById("run-convert")?.addEventListener("click", () => {
     const cues = parseSrt(input.value);
