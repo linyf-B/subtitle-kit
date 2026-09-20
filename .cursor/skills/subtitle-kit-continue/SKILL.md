@@ -122,7 +122,9 @@ Reddit / 目录 / PH：生成英文正文到聊天或 `docs/drafts/YYYY-MM-DD-{t
 
 1. `git status` / `git diff` 确认无 `.env` 等密钥
 2. `git add` 相关文件
-3. **`git commit`** 写清本次内容（guides、sprint、SEO 等）
+3. **`git commit`** 写清本次内容（guides、sprint、SEO 等）  
+   - Cursor 终端里裸 `git commit` 可能因 Git 2.22 + `--trailer` 失败 → 用：  
+     `python scripts/git_commit.py "subject" "optional body"`
 4. **禁止** `git push` — 由用户本机 push（可用 SOCKS 代理）
 5. 汇报里写：`git log -1 --oneline` 与「请你 push」
 
