@@ -1,0 +1,108 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import SeoToolExtras from "../../../components/SeoToolExtras.astro";
+
+const faqs = [
+  {
+    question: "Why convert SRT to plain text for translation?",
+    answer:
+      "Translators often work in CAT tools or Word without timing codes. Plain text avoids accidental edits to timestamps and reduces file format confusion.",
+  },
+  {
+    question: "Should I include timestamps in the export?",
+    answer:
+      "For translation-only handoff, strip timestamps. Keep timestamps if the reviewer must match lines to video timecodes.",
+  },
+  {
+    question: "Is SRT to text the same as transcription?",
+    answer:
+      "No. You already have subtitles; you are extracting dialogue. Transcription creates text from audio.",
+  },
+  {
+    question: "Does the converter upload my file?",
+    answer:
+      "Subtitle Kit runs in the browser. Your SRT is not sent to our servers for conversion.",
+  },
+  {
+    question: "What about speaker labels?",
+    answer:
+      "Standard SRT rarely includes speakers. If your file has custom formatting, clean it in the editor before export.",
+  },
+];
+
+const steps = [
+  "Paste SRT or open a .srt file in the browser tool.",
+  "Choose plain text with or without timecodes.",
+  "Copy or download for your translator or TMS.",
+];
+---
+
+<BaseLayout
+  title="SRT to text for translation — export dialogue without timing"
+  description="Prepare subtitle files for translators: convert SRT to plain text in the browser, optional timestamps, no upload."
+  canonicalPath="/guides/srt-to-text-for-translation/"
+>
+  <p class="badge">Guide · ~7 min read</p>
+  <h1>SRT to text for translation workflows</h1>
+  <p class="lede">
+    Localization teams rarely want raw SubRip with arrows and milliseconds in the first
+    pass. This guide covers when to strip timecodes, how to export dialogue safely, and
+    how to merge translated text back into timed captions.
+  </p>
+
+  <div class="prose-block">
+    <h2>When to export SRT as plain text</h2>
+    <ul>
+      <li>First-pass translation in Word, Google Docs, or a TMS</li>
+      <li>Client review of dialogue only (no burn-in timing)</li>
+      <li>Glossary building from existing finished subs</li>
+      <li>Script comparison against original language SRT</li>
+    </ul>
+
+    <h2>Recommended handoff format</h2>
+    <p>
+      Export <strong>one line per cue</strong>, no index numbers, no timing arrows.
+      Use our <a href="/tools/srt-to-text/">SRT to text tool</a> to paste or open a file locally.
+      After translation, re-time in your NLE or regenerate SRT from your TMS—do not assume
+      line count stays identical if target language expands.
+    </p>
+
+    <h2>Quality checklist before you send</h2>
+    <ol>
+      <li>Remove HTML tags or ASS-style overrides if present in source SRT.</li>
+      <li>Merge duplicate consecutive lines from auto-captions.</li>
+      <li>Note max reading speed (chars/sec) for the target platform.</li>
+      <li>Share video reference or timecoded review link separately.</li>
+    </ol>
+
+    <h2>After translation returns</h2>
+    <p>
+      Import timed SRT from your CAT tool, or shift timing with
+      <a href="/tools/srt-time-shift/">SRT time shift</a> if the new dub track differs.
+      Check <a href="/tools/line-length/">caption line length</a> before publishing vertical cuts.
+    </p>
+
+    <h2>Privacy for client scripts</h2>
+    <p>
+      Unreleased series and legal review scripts should not go to random «upload your SRT»
+      converters. Browser-local conversion keeps content on the freelancer’s device—document
+      that in your SOW.
+    </p>
+  </div>
+
+  <p class="cta-row">
+    <a class="btn" href="/tools/srt-to-text/">Convert SRT to text</a>
+  </p>
+
+  <SeoToolExtras
+    faqs={faqs}
+    toolName="SRT to text for translation"
+    toolDescription="Browser tool to export subtitle dialogue as plain text for translators."
+    path="/guides/srt-to-text-for-translation/"
+    steps={steps}
+  />
+</BaseLayout>
+
+<style>
+  .cta-row { margin: 1.5rem 0 2rem; }
+</style>

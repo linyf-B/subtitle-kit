@@ -1,0 +1,108 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import SeoToolExtras from "../../../components/SeoToolExtras.astro";
+
+const faqs = [
+  {
+    question: "What is a safe line length for TikTok or Reels captions?",
+    answer:
+      "Many editors aim for roughly 28–42 Latin characters per line on 9:16, depending on font size. Shorter lines read faster on mobile.",
+  },
+  {
+    question: "Why do long subtitle lines fail on vertical video?",
+    answer:
+      "Narrow frame width wraps text into tall blocks that cover faces and safe zones. Two short lines usually beat one long line.",
+  },
+  {
+    question: "Does character count include spaces?",
+    answer:
+      "Yes for readability checks. CJK scripts may use fewer characters with similar visual width—adjust thresholds per language.",
+  },
+  {
+    question: "Can I check an entire SRT file at once?",
+    answer:
+      "Paste or upload the full SRT in the line length tool; it reports the longest lines and per-cue counts.",
+  },
+  {
+    question: "Is this a replacement for platform auto-captions?",
+    answer:
+      "No. It audits files you already authored or exported, before burn-in or upload.",
+  },
+];
+
+const steps = [
+  "Paste or upload your SRT in the browser checker.",
+  "Set max characters per line (try 32–40 for Reels).",
+  "Edit flagged cues in your editor, re-check until clean.",
+];
+---
+
+<BaseLayout
+  title="Subtitle line length for TikTok and Reels"
+  description="Check SRT caption line length for vertical short-form video. Free browser tool with sensible defaults for TikTok and Instagram Reels."
+  canonicalPath="/guides/subtitle-line-length-tiktok-reels/"
+>
+  <p class="badge">Guide · ~6 min read</p>
+  <h1>Subtitle line length for TikTok, Reels, and Shorts</h1>
+  <p class="lede">
+    Horizontal subtitle rules break on 9:16. This guide explains character limits,
+    how to scan an entire SRT, and when to split lines without breaking grammar.
+  </p>
+
+  <div class="prose-block">
+    <h2>Why vertical video needs shorter lines</h2>
+    <p>
+      Phone screens are narrow. A line that worked on 16:9 may wrap to three rows on
+      Reels, blocking product shots and faces. Editors often cap
+      <strong>characters per line</strong> instead of guessing after export.
+    </p>
+
+    <h2>Starting thresholds (English)</h2>
+    <table>
+      <thead><tr><th>Platform style</th><th>Chars / line (starting point)</th></tr></thead>
+      <tbody>
+        <tr><td>TikTok talking head</td><td>28–36</td></tr>
+        <tr><td>Reels / Shorts punchy captions</td><td>24–32</td></tr>
+        <tr><td>Educational vertical</td><td>32–42</td></tr>
+      </tbody>
+    </table>
+    <p>
+      Run your file through the <a href="/tools/line-length/">caption line length checker</a>
+      with your chosen max; fix outliers first (often auto-caption merges).
+    </p>
+
+    <h2>How to split lines without ruining timing</h2>
+    <ol>
+      <li>Split at punctuation or natural phrase breaks—not mid-idiom.</li>
+      <li>Keep both lines under the cap; balance line 1 vs line 2 length.</li>
+      <li>Avoid splitting a single cue into two timecodes unless readability demands it.</li>
+      <li>Re-export SRT and re-run the checker.</li>
+    </ol>
+
+    <h2>Pair with timing fixes</h2>
+    <p>
+      Short-form often needs both readable line breaks and sync fixes. Use
+      <a href="/tools/srt-time-shift/">SRT time shift</a> after re-timing dub audio, then
+      line length check before final render. For VO planning see
+      <a href="/tools/read-time/">read time estimator</a>.
+    </p>
+  </div>
+
+  <p class="cta-row">
+    <a class="btn" href="/tools/line-length/">Check caption line length</a>
+  </p>
+
+  <SeoToolExtras
+    faqs={faqs}
+    toolName="Caption line length for vertical video"
+    toolDescription="Browser SRT line length checker tuned for short-form vertical captions."
+    path="/guides/subtitle-line-length-tiktok-reels/"
+    steps={steps}
+  />
+</BaseLayout>
+
+<style>
+  .cta-row { margin: 1.5rem 0 2rem; }
+  .prose-block table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.95rem; }
+  .prose-block th, .prose-block td { border: 1px solid #334155; padding: 0.5rem 0.75rem; text-align: left; }
+</style>

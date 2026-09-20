@@ -4,8 +4,13 @@
   "sprintStart": "2026-09-20",
   "siteUrl": "https://subtitle-kit.pages.dev",
   "gscPropertyUrl": "https://search.google.com/search-console?resource_id=https%3A%2F%2Fsubtitle-kit.pages.dev%2F&after_verification_success=",
-  "completedTaskIds": [],
-  "guidesDone": ["fix-subtitle-sync-constant-delay"],
+  "completedTaskIds": ["w1-guides-2", "w2-guides-34"],
+  "guidesDone": [
+    "fix-subtitle-sync-constant-delay",
+    "shift-srt-timing-online-free",
+    "srt-to-text-for-translation",
+    "subtitle-line-length-tiktok-reels"
+  ],
   "redditPosts": 0,
   "directorySubmits": 0,
   "phLaunched": false,
@@ -16,8 +21,8 @@
     "gscImpressions28d": null,
     "gscClicks28d": null,
     "indexedPages": null,
-    "source": "2026-09-20: live 站 curl 200 OK；Cursor 内置浏览器 GSC 导航失败(chrome-error)，待用户登录 GSC 后补数"
+    "source": "待用户粘贴 GSC 或侧栏登录后更新"
   },
   "weeklyLog": [],
-  "notes": "Day1: 已本地新增 guide fix-subtitle-sync-constant-delay + build。大量改动未 push（见 git status）。"
+  "notes": "Week1-2 guides 齐；drafts: reddit, PH, Show HN, Dev.to。待 push 部署。"
 }

@@ -1,0 +1,48 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+const guides = [
+  {
+    href: "/guides/fix-subtitle-sync-constant-delay/",
+    title: "Fix constant subtitle delay",
+    blurb: "Diagnose uniform lag and apply one SRT offset.",
+  },
+  {
+    href: "/guides/shift-srt-timing-online-free/",
+    title: "Shift SRT timing online (free)",
+    blurb: "Browser shift with no upload—ms or seconds.",
+  },
+  {
+    href: "/guides/srt-to-text-for-translation/",
+    title: "SRT to text for translation",
+    blurb: "Export dialogue for translators without timing noise.",
+  },
+  {
+    href: "/guides/subtitle-line-length-tiktok-reels/",
+    title: "Line length for TikTok & Reels",
+    blurb: "Character limits for vertical captions.",
+  },
+];
+---
+
+<BaseLayout
+  title="Subtitle guides — SRT workflows"
+  description="Free guides: fix sync, shift SRT online, export text for translation, and check caption line length for short-form video."
+  canonicalPath="/guides/"
+>
+  <h1>Guides</h1>
+  <p class="lede">
+    Step-by-step workflows for editors and translators. Each guide links to a free browser
+    tool on Subtitle Kit—files stay on your device.
+  </p>
+  <ul class="tool-list">
+    {guides.map((g) => (
+      <li>
+        <a href={g.href}>
+          {g.title}
+          <span>{g.blurb}</span>
+        </a>
+      </li>
+    ))}
+  </ul>
+</BaseLayout>

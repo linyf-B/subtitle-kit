@@ -1,0 +1,117 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import SeoToolExtras from "../../../components/SeoToolExtras.astro";
+
+const faqs = [
+  {
+    question: "Can I shift SRT timing online without uploading my file?",
+    answer:
+      "Yes. Browser-based shifters read your .srt locally with JavaScript. Subtitle Kit never sends subtitle content to a server—paste text or open a file on your device only.",
+  },
+  {
+    question: "Is online SRT shift accurate for lip-sync?",
+    answer:
+      "A fixed offset is accurate when every cue is wrong by the same amount. Use millisecond steps (±100–500 ms), preview three lines, then download the shifted file.",
+  },
+  {
+    question: "Negative shift vs positive shift?",
+    answer:
+      "Positive values move subtitles later (fix late text). Negative values move them earlier (fix text that appears before speech).",
+  },
+  {
+    question: "Does this work on phone?",
+    answer:
+      "Modern mobile browsers can run the tool for small files. For long SRT files, desktop is more comfortable.",
+  },
+  {
+    question: "Free online SRT shift vs desktop apps?",
+    answer:
+      "Online browser tools are ideal for one-off fixes after export. Desktop apps make sense if you retime hundreds of cues individually.",
+  },
+];
+
+const steps = [
+  "Paste SRT or choose a .srt file (stays on your device).",
+  "Enter offset in seconds or milliseconds; negative allowed.",
+  "Apply, preview in your player, download shifted.srt.",
+];
+---
+
+<BaseLayout
+  title="Shift SRT timing online free (browser, no upload)"
+  description="Free online SRT time shift in your browser. Offset all subtitle cues by ms or seconds—no account, no server upload."
+  canonicalPath="/guides/shift-srt-timing-online-free/"
+>
+  <p class="badge">Guide · ~6 min read</p>
+  <h1>Shift SRT timing online—free and private in your browser</h1>
+  <p class="lede">
+    You exported subtitles and every line is 0.5 seconds late. You do not need desktop
+    software or a paid SaaS upload. This guide explains how a free online SRT shift works,
+    when it is the right fix, and how to do it without sending files to a server.
+  </p>
+
+  <div class="prose-block">
+    <h2>What “shift SRT online” actually does</h2>
+    <p>
+      SubRip (.srt) files store start and end times for each caption. A <strong>time shift</strong>
+      adds the same offset to every timestamp— for example +500 ms so all cues appear half a
+      second later. That is different from editing individual lines in Premiere or DaVinci,
+      which you only need when cues drift apart over time.
+    </p>
+
+    <h2>Why use a browser tool instead of uploading to a converter site?</h2>
+    <ul>
+      <li><strong>Privacy</strong> — client scripts, unlisted client names, and draft dialogue stay on your machine.</li>
+      <li><strong>Speed</strong> — paste, shift, download in under a minute for typical YouTube-length files.</li>
+      <li><strong>No account</strong> — no signup wall for a one-time dub sync fix.</li>
+    </ul>
+    <p>
+      Use our <a href="/tools/srt-time-shift/">free SRT time shift tool</a>: open or paste
+      SRT, pick seconds or milliseconds, apply, download. Processing runs locally; see also
+      <a href="/guides/fix-subtitle-sync-constant-delay/">fix constant subtitle delay</a> for diagnosis.
+    </p>
+
+    <h2>Step-by-step (online workflow)</h2>
+    <ol>
+      <li>Export .srt from your editor or download from YouTube Studio.</li>
+      <li>Measure one line: speech start vs subtitle appearance (estimate ms).</li>
+      <li>Open the browser shifter, enter offset, apply to all cues.</li>
+      <li>Re-import to your NLE or upload to your platform; spot-check opening, middle, end.</li>
+    </ol>
+
+    <h2>Common offsets</h2>
+    <table>
+      <thead><tr><th>Situation</th><th>Typical offset</th></tr></thead>
+      <tbody>
+        <tr><td>Dubbed track replaced original</td><td>+200 ms to +800 ms</td></tr>
+        <tr><td>Subs appear before dialogue</td><td>Negative 100–400 ms</td></tr>
+        <tr><td>Streaming player delay</td><td>+100 ms to +300 ms</td></tr>
+      </tbody>
+    </table>
+
+    <h2>Limits of online shift</h2>
+    <p>
+      If error grows minute by minute, you have <em>drift</em>, not a constant delay—regenerate
+      subs or fix frame rate. For translation prep, pair shifting with
+      <a href="/tools/srt-to-text/">SRT to text</a> to strip timecodes for translators.
+    </p>
+  </div>
+
+  <p class="cta-row">
+    <a class="btn" href="/tools/srt-time-shift/">Shift SRT online (free)</a>
+  </p>
+
+  <SeoToolExtras
+    faqs={faqs}
+    toolName="Online SRT time shift"
+    toolDescription="Free browser tool to shift all SRT cues without uploading files."
+    path="/guides/shift-srt-timing-online-free/"
+    steps={steps}
+  />
+</BaseLayout>
+
+<style>
+  .cta-row { margin: 1.5rem 0 2rem; }
+  .prose-block table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.95rem; }
+  .prose-block th, .prose-block td { border: 1px solid #334155; padding: 0.5rem 0.75rem; text-align: left; }
+</style>
