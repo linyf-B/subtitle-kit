@@ -53,5 +53,5 @@ Agent 继续用 `curl.exe -sI https://subtitle-kit.pages.dev/` 确认部署是�
 
 ## Git 约定（用户指定）
 
-- Agent **每次改仓库都 `git commit`**，消息说明本次 sprint/功能。
-- **不** `git push`；由用户本机 push（可继续用 SOCKS 代理）。
+- Agent **每次改仓库都 `git commit`**（`python scripts/git_commit.py`），**不 push**。
+- **不以每日小时数限制** Agent 产出；瓶颈是 push / GSC 数据 / 亲手发帖（见 PLAN-30DAY §0）。

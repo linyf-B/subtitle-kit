@@ -6,29 +6,65 @@
 >  
 > **本月不要求：** $50/日。有 UV 后再接广告。
 
+**运行模式（默认）：Cursor 辅助** — 见 [§0](#0-cursor-辅助不以小时为上限)。你说「继续」= Agent 尽量多完成 **仓库内** 交付；**不以「每天 1～2 小时」卡产能**。
+
 **站点：** https://subtitle-kit.pages.dev  
 **长期计划：** [PLAN-50USD-DAY.md](./PLAN-50USD-DAY.md)  
 **外链文案：** [seo-outreach.md](./seo-outreach.md)
 
 ---
 
-## 每天怎么分配（1～2 小时）
+## §0 Cursor 辅助：不以小时为上限
 
-| 比例 | 做什么 |
-|------|--------|
-| **60%** | Cursor：guides / 改标题 / PH 素材 |
-| **40%** | 浏览器：**发帖、填目录、回评论**（Cursor 只写草稿） |
+原假设「每天 1～2h」适合**纯手工**建站。你用 **Cursor + subtitle-kit-continue skill** 时，写作 / 改代码 / build / commit 由 Agent 批量做，**真正瓶颈**只有下面几类（和小时数无关）：
 
-每周日：填 §9 数据表（见 PLAN-50USD-DAY.md）。
+| 类型 | 谁做 | 说明 |
+|------|------|------|
+| **仓库产出** | Cursor | guides、SEO 改 title、工具页、草稿；每次「继续」可 **连写多篇** guide（build 通过后 **一次 commit**） |
+| **上线** | 你 | `git push` → Cloudflare 部署（Agent 不 push） |
+| **数据** | 你或侧栏浏览器 | GSC 点击/展示/索引、CF UV：粘贴 `数据 点击X 展示Y 索引Z` 或登录 Cursor 浏览器 |
+| **分发** | 你 | Reddit / 目录 / PH **亲手发**；Agent 只出英文草稿 |
+| **实时互动** | 你 | PH Launch 日回评、 Reddit 跟帖 |
+
+### 每次「继续」Agent 默认做什么
+
+1. 读 `sprint-state.json` + 指标（有则调策略）。
+2. **清空当前 Week 的 guide  backlog**（最多连做 **当周日历里尚未完成的 guides**，单次上限 **3 篇**，避免一轮过长）；或仅 1 篇若你说了「今天只发 1 篇」。
+3. `npm run build` → `python scripts/git_commit.py` → 提醒你 **push**。
+4. 列出 **下一项手动闸门**（push / 粘贴数据 / 发第几条 Reddit），**不**用「今天只能干 1 小时」截断。
+
+### 手动闸门配额（按 Week，不是按天小时）
+
+| Week | 你最少要完成的手动项 |
+|------|----------------------|
+| 1 | push ≥1；GSC sitemap/索引看过 1 次；指标进表 1 次 |
+| 2 | Reddit **2** + 目录 **2** + push 随 Agent commit 走 |
+| 3 | PH（或路径 B）Launch **1 天** + 当天回评 |
+| 4 | 目录 **2** + Reddit **1**；UV≥200 则 AdSense 申请 |
+
+### 加速（可选）
+
+- **Week 1～2 的 4 篇 guide** 可在 **2～4 次「继续」** 内写完（旧计划按周 2 篇是保守值）。
+- UV 落后时：**优先手动分发**，Agent 暂停加 guide；索引落后时：**优先 push + 请求编入索引**。
 
 ---
 
-## Week 1 — 基线 + 2 篇 guide
+## 节奏参考（原 1～2h/天 → 改为交付物）
+
+| 优先 | 做什么 |
+|------|--------|
+| **P0 仓库** | 当周 guides / 改 title / PH 素材（Cursor，可一次多篇） |
+| **P0 手动** | push、GSC/CF 数据、发帖 |
+| **P2** | 周日填 PLAN-50USD §9 数据表一行 |
+
+---
+
+## Week 1 — 基线 + guides（Cursor 可一次多篇）
 
 ### 必做
 
 - [ ] `git push` 确保线上是最新（含 P0 SEO、docs）
-- [ ] Cursor 新建 2 篇 guides（见 PLAN-50USD-DAY §7 第 1～2 条）
+- [ ] Cursor：**Week1 共 2 篇 guides**（§7 第 1～2 条；可 1 次「继续」连做）
 - [ ] GSC：确认 sitemap Success；Indexing 记索引页数
 - [ ] 建表格：日期 | UV | 28d展示 | 28d点击 | 索引 | 本周动作
 
@@ -144,9 +180,9 @@
 ## Cursor 每日一句（复制）
 
 ```
-今天执行 docs/PLAN-30DAY-SPRINT.md 的 Week {N} 未打勾项；
-若是 Reddit/PH 只生成英文草稿，我手动发帖；
-若是 guide 则直接改仓库并 npm run build。
+按 docs/PLAN-30DAY-SPRINT.md §0 Cursor 辅助：
+读 sprint-state，补指标；当周未完成的 guides 尽量本轮写完（最多 3 篇），build + git_commit；
+Reddit/PH 只出草稿。最后列出我要 push / 发帖 / 粘贴数据的下一项。
 ```
 
 ---

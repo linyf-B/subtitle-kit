@@ -9,7 +9,7 @@
 1. 校验 `docs/sprint-state.json` + `package.json`（name: `subtitle-kit`）
 2. `python scripts/sprint_status.py`
 3. 浏览器读 GSC（`gscPropertyUrl` in sprint-state）
-4. 本仓库有改动 → **`git commit`**（不 push）；汇报「请你 push」
+4. 本仓库有改动 → **`git commit`**（不 push）；**guide 产能不受 1～2h/天限制**（见 PLAN-30DAY §0）
 
 ## 计划文档
 

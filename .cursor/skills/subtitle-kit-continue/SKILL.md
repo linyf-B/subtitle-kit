@@ -71,8 +71,8 @@ python scripts/sprint_status.py
 
 | 条件 | 今日优先 |
 |------|----------|
-| Week 1 | 2 guides + GSC 基线；**不做** Reddit/PH |
-| UV 落后且 Week≥2 | 40% 时间 Reddit/目录；Cursor 只写帖文草稿 |
+| Week 1 | 连写 Week1 guides（最多 3 篇/轮）+ GSC 基线；**不做** Reddit/PH |
+| UV 落后且 Week≥2 | **你**优先 Reddit/目录；Agent 只出草稿、少开新 guide |
 | `nextGuide` 存在且 Week1 将结束仍缺 guide | 先写完 guide 再分发 |
 | Week 3 | PH 或路径 B；Launch 日可暂停 guide |
 | Week 4 + UV≥200 | AdSense 准备；否则 es/P2（见 PLAN-30DAY Week4） |
@@ -82,7 +82,15 @@ python scripts/sprint_status.py
 
 ## 4. 自动执行（Cursor 可完成部分）
 
-按 **一条** P0 做完再汇报（不要空转）：
+**不以「每天 1～2 小时 / 每天 1 篇」为上限**（见 [PLAN-30DAY-SPRINT §0](../../../docs/PLAN-30DAY-SPRINT.md)）。
+
+默认每一轮「继续」：
+
+1. 从 `nextGuide` 起，**连写当周尚未完成的 guides**，单次上限 **3 篇**（用户说「今天只 1 篇」则只写 1 篇）。
+2. 全部改完后 **一次** `npm run build`。
+3. `python scripts/git_commit.py "..." "..."` → 汇报 **请你 push**。
+
+仍按 **一条 P0 手动闸门** 在汇报里点明（push / 粘贴数据 / 发贴），但不要因工时假设提前停写 guide。
 
 ### 4.1 下一篇 guide（最常见）
 

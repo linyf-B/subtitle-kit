@@ -103,15 +103,15 @@ def adjust_strategy(day: int, week: int, metrics: dict, pending: list) -> list[s
     clicks = metrics.get("gscClicks28d")
     target_pace = (800 / 28) * day if day else None
     if uv is not None and target_pace and uv < target_pace * 0.5 and week >= 2:
-        tips.append("UV 明显落后：今日 40% 时间优先 Reddit/目录，guides 只做 1 篇或暂停。")
+        tips.append("UV 明显落后：优先你手动 Reddit/目录；Agent 暂停加 guide，只出帖文草稿。")
     if len(pending) >= 2 and week == 1 and day >= 5:
-        tips.append("Week1 guides 未完成：Cursor 优先补 guide，暂缓外链。")
+        tips.append("Week1 guides 未完成：说「继续」，Agent 可一轮连写剩余 guide（§0 最多 3 篇）。")
     if week >= 3 and (uv or 0) < 200 and (clicks or 0) < 15:
         tips.append("接近 Week4 低档：预备 P1 西班牙语或 P2 长尾强化（见 PLAN-30DAY-SPRINT Week4）。")
     if week >= 2 and (clicks or 0) == 0 and (metrics.get("indexedPages") or 0) < 5:
-        tips.append("索引偏少：GSC URL 检查 + 手动 Request indexing 2 个工具页与 1 篇 guide。")
+        tips.append("索引偏少：你 push 后 GSC URL 检查 + Request indexing 2 工具页 + 1 guide。")
     if not tips:
-        tips.append("按 PLAN-30DAY-SPRINT 当前 Week 默认比例：60% Cursor / 40% 浏览器发帖。")
+        tips.append("Cursor 辅助模式：Agent 按 Week 交付 guide；你按 §0 手动闸门 push/数据/发帖。")
     return tips
 
 

@@ -1,5 +1,6 @@
 {
   "version": 1,
+  "workflowMode": "cursor-assisted",
   "sprintStart": "2026-09-20",
   "siteUrl": "https://subtitle-kit.pages.dev",
   "gscPropertyUrl": "https://search.google.com/search-console?resource_id=https%3A%2F%2Fsubtitle-kit.pages.dev%2F&after_verification_success=",
