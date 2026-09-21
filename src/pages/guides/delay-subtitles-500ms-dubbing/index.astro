@@ -1,0 +1,98 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import SeoToolExtras from "../../../components/SeoToolExtras.astro";
+
+const faqs = [
+  {
+    question: "Why delay subtitles by 500ms?",
+    answer:
+      "Dubbed tracks often lag picture lock; +500 ms (0.5 s) is a common starting offset when every line is late by a similar amount.",
+  },
+  {
+    question: "Is 500ms always correct?",
+    answer:
+      "No. Measure one dialogue line; use 300–800 ms typical range. 500 ms is a midpoint for testing, not a universal fix.",
+  },
+  {
+    question: "Milliseconds vs seconds in SRT shift tools?",
+    answer:
+      "Either works: 500 ms equals 0.5 s. Use ms for fine lip-sync after you are within ~100 ms.",
+  },
+  {
+    question: "Will a global 500ms shift fix drift?",
+    answer:
+      "Only if error is constant. If sync worsens over time, fix frame rate or regenerate subs.",
+  },
+  {
+    question: "Can I apply +500ms in the browser?",
+    answer:
+      "Yes—paste or open .srt, enter 500 in ms mode (or 0.5 s), apply to all cues, download.",
+  },
+];
+
+const steps = [
+  "Confirm constant delay (same error at start, middle, end).",
+  "In SRT shift tool, set +500 ms (adjust after preview).",
+  "Download, re-import, spot-check three lines.",
+];
+---
+
+<BaseLayout
+  title="Delay subtitles 500ms for dubbing — SRT offset guide"
+  description="When and how to shift all SRT cues by 500 milliseconds after dubbing. Free browser tool, no upload."
+  canonicalPath="/guides/delay-subtitles-500ms-dubbing/"
+>
+  <p class="badge">Guide · ~5 min read</p>
+  <h1>Delay subtitles by 500ms after dubbing (starting point)</h1>
+  <p class="lede">
+    “Move everything half a second later” is a common dubbing fix—but only when timing
+    error is uniform. This guide explains when +500 ms helps, when it does not, and how to
+    apply it in an SRT file.
+  </p>
+
+  <div class="prose-block">
+    <h2>When +500 ms is a reasonable first try</h2>
+    <ul>
+      <li>New dialogue track replaced M&E but subs were timed to old audio</li>
+      <li>Every cue looks ~0.4–0.6 s late in preview</li>
+      <li>Export is fresh SubRip from the same picture lock</li>
+    </ul>
+
+    <h2>When not to use a fixed 500 ms</h2>
+    <p>
+      Drift over runtime, per-scene different errors, or subs authored against wrong video
+      need cue-level edits or re-transcode—not a global offset. See
+      <a href="/guides/fix-subtitle-sync-constant-delay/">fix constant subtitle delay</a>.
+    </p>
+
+    <h2>Apply +500 ms in practice</h2>
+    <ol>
+      <li>Open <a href="/tools/srt-time-shift/">SRT time shift</a>.</li>
+      <li>Set unit to <strong>milliseconds</strong>, offset <strong>500</strong> (positive = later).</li>
+      <li>Apply, download, test opening + mid + end.</li>
+      <li>If still early/late, tweak in 50–100 ms steps—not another arbitrary 500 ms stack.</li>
+    </ol>
+
+    <h2>Fine-tuning after 500 ms</h2>
+    <p>
+      Lip-sync often lands between 350 ms and 650 ms. After the first pass, adjust by
+      ±100 ms. Pair with <a href="/tools/line-length/">line length checks</a> before vertical export.
+    </p>
+  </div>
+
+  <p class="cta-row">
+    <a class="btn" href="/tools/srt-time-shift/">Shift SRT by 500ms</a>
+  </p>
+
+  <SeoToolExtras
+    faqs={faqs}
+    toolName="Delay subtitles 500ms"
+    toolDescription="Guide to apply a +500 ms offset to all SRT cues after dubbing."
+    path="/guides/delay-subtitles-500ms-dubbing/"
+    steps={steps}
+  />
+</BaseLayout>
+
+<style>
+  .cta-row { margin: 1.5rem 0 2rem; }
+</style>

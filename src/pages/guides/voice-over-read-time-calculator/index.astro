@@ -1,0 +1,107 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import SeoToolExtras from "../../../components/SeoToolExtras.astro";
+
+const faqs = [
+  {
+    question: "What WPM should I use for voice-over read time?",
+    answer:
+      "English narration often uses 130–160 WPM for clear VO. Fast promo reads may hit 170+; educational content is often 120–140 WPM.",
+  },
+  {
+    question: "Does read time include pauses?",
+    answer:
+      "Word-count estimators assume continuous speech. Add 5–15% buffer for breaths, B-roll cuts, and emphasis pauses.",
+  },
+  {
+    question: "Can I estimate from SRT instead of a script?",
+    answer:
+      "Yes—export plain text from SRT (strip timecodes) and paste into a read-time tool, or count words in the subtitle file.",
+  },
+  {
+    question: "How does this help subtitle editors?",
+    answer:
+      "You know if dialogue fits a 30s slot before recording VO, and whether captions will stay readable at your speaking pace.",
+  },
+  {
+    question: "Is my script uploaded to a server?",
+    answer:
+      "Subtitle Kit’s read-time tool runs in your browser; pasted text is not sent to our servers for calculation.",
+  },
+];
+
+const steps = [
+  "Paste script or SRT-derived plain text.",
+  "Pick a WPM preset (or custom) matching your delivery style.",
+  "Note total minutes; add buffer for pauses before recording.",
+];
+---
+
+<BaseLayout
+  title="Voice-over read time calculator for scripts and SRT"
+  description="Estimate narration duration from word count with WPM presets. Free browser calculator for editors and creators."
+  canonicalPath="/guides/voice-over-read-time-calculator/"
+>
+  <p class="badge">Guide · ~5 min read</p>
+  <h1>Voice-over read time calculator (from word count)</h1>
+  <p class="lede">
+    Before you record narration or tighten a 60-second ad, estimate how long the script
+    actually takes to speak. This guide covers WPM presets, SRT-to-script workflow, and
+    when to add pause buffer.
+  </p>
+
+  <div class="prose-block">
+    <h2>Why editors care about read time</h2>
+    <p>
+      Subtitle length and VO length must match the picture lock. If the script reads 45
+      seconds but the slot is 30, you cut lines or speed up delivery—before studio time.
+    </p>
+
+    <h2>WPM presets (English starting points)</h2>
+    <table>
+      <thead><tr><th>Style</th><th>WPM</th></tr></thead>
+      <tbody>
+        <tr><td>Calm explainer</td><td>120–135</td></tr>
+        <tr><td>Standard YouTube VO</td><td>140–155</td></tr>
+        <tr><td>Fast social ad</td><td>165–180</td></tr>
+      </tbody>
+    </table>
+    <p>
+      Use the <a href="/tools/read-time/">read time estimator</a> with these presets on
+      pasted text. For subtitle-derived scripts, convert with
+      <a href="/tools/srt-to-text/">SRT to text</a> first.
+    </p>
+
+    <h2>Workflow with subtitles</h2>
+    <ol>
+      <li>Export SRT → plain text (one line per cue).</li>
+      <li>Paste into read-time tool; pick WPM.</li>
+      <li>Compare duration to video runtime; trim dialogue or adjust pacing.</li>
+      <li>After timing shifts, re-check with <a href="/tools/srt-time-shift/">SRT time shift</a>.</li>
+    </ol>
+
+    <h2>Buffer for real recordings</h2>
+    <p>
+      Add roughly <strong>10%</strong> for breaths and retakes planning. Legal disclaimers
+      and numbers often slow delivery—read them aloud once instead of trusting WPM alone.
+    </p>
+  </div>
+
+  <p class="cta-row">
+    <a class="btn" href="/tools/read-time/">Open read time calculator</a>
+  </p>
+
+  <SeoToolExtras
+    faqs={faqs}
+    toolName="Voice-over read time calculator"
+    toolDescription="Estimate narration length from word count in the browser."
+    path="/guides/voice-over-read-time-calculator/"
+    steps={steps}
+  />
+</BaseLayout>
+
+<style>
+  .cta-row { margin: 1.5rem 0 2rem; }
+  .prose-block table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.95rem; }
+  .prose-block th, .prose-block td { border: 1px solid #334155; padding: 0.5rem 0.75rem; text-align: left; }
+</style>

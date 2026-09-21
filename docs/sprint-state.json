@@ -4,25 +4,28 @@
   "sprintStart": "2026-09-20",
   "siteUrl": "https://subtitle-kit.pages.dev",
   "gscPropertyUrl": "https://search.google.com/search-console?resource_id=https%3A%2F%2Fsubtitle-kit.pages.dev%2F&after_verification_success=",
-  "completedTaskIds": ["w1-guides-2", "w2-guides-34"],
+  "completedTaskIds": ["w1-guides-2", "w2-guides-34", "w1-push", "w3-guides-56"],
   "guidesDone": [
     "fix-subtitle-sync-constant-delay",
     "shift-srt-timing-online-free",
     "srt-to-text-for-translation",
-    "subtitle-line-length-tiktok-reels"
+    "subtitle-line-length-tiktok-reels",
+    "voice-over-read-time-calculator",
+    "delay-subtitles-500ms-dubbing"
   ],
   "redditPosts": 0,
   "directorySubmits": 0,
   "phLaunched": false,
+  "phScheduled": true,
   "phPath": "A",
   "lastMetrics": {
-    "date": "2026-09-20",
+    "date": "2026-09-21",
     "uv28d": null,
     "gscImpressions28d": null,
     "gscClicks28d": null,
     "indexedPages": null,
-    "source": "待用户粘贴 GSC 或侧栏登录后更新"
+    "source": "首页 URL 已 indexed；Pages 报表 processing；sitemap 线上 200，GSC 需重交 sitemap-index.xml"
   },
   "weeklyLog": [],
-  "notes": "Week1-2 guides 齐；drafts: reddit, PH, Show HN, Dev.to。待 push 部署。"
+  "notes": "PH 已排期+站脚徽章。Week3 两篇 guide 已本地新增。手动：GSC sitemap Success、Reddit×2、目录×2、PH Launch 日回评。"
 }
