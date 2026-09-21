@@ -1,0 +1,134 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import SeoToolExtras from "../../../components/SeoToolExtras.astro";
+
+const faqs = [
+  {
+    question: "Why shift VTT for vertical video?",
+    answer:
+      "Short-form exports often use WebVTT for burned-in preview or HTML5 review. When dubbing or re-export shifts audio, every caption line may be late by the same amount—a global VTT shift fixes it without re-transcribing.",
+  },
+  {
+    question: "Can I shift VTT online without uploading?",
+    answer:
+      "Yes. Browser tools parse WebVTT locally. Subtitle Kit never sends your .vtt to a server—paste or open the file on your device only.",
+  },
+  {
+    question: "WebVTT uses dots—does that matter?",
+    answer:
+      "WebVTT timestamps use a period before milliseconds (00:01.500). SubRip SRT uses a comma. Use a VTT-specific shifter so the file stays valid for players and platforms.",
+  },
+  {
+    question: "What offset should I try first?",
+    answer:
+      "For dubbed vertical clips, start with +300 ms to +600 ms, preview three lines, then fine-tune in 100 ms steps. If text appears before speech, use a negative offset.",
+  },
+  {
+    question: "After shifting, what else should I check?",
+    answer:
+      "Run a line-length pass for 9:16 safe zones, then spot-check the hook in the first three seconds—viewers drop if captions feel wrong there.",
+  },
+];
+
+const steps = [
+  "Export or download .vtt from your editor or platform.",
+  "Measure constant delay (speech vs caption appearance).",
+  "Shift all cues in the browser tool, download shifted.vtt.",
+  "Re-import or replace the track; check hook, middle, and end.",
+];
+---
+
+<BaseLayout
+  title="Shift VTT timestamps for vertical video (online, no upload)"
+  description="Fix uniformly late or early WebVTT captions for Reels, Shorts, and HTML5 preview. Free browser shift—privacy-first, no account."
+  canonicalPath="/guides/shift-vtt-timestamps-vertical-video/"
+>
+  <p class="badge">Guide · ~7 min read</p>
+  <h1>How to shift VTT timestamps for vertical video (without re-uploading subs)</h1>
+  <p class="lede">
+    Your 9:16 export plays fine but every caption is half a second late. Re-transcribing
+    wastes time. When the error is the same on every line, shift the whole WebVTT file by
+    milliseconds in your browser—no SaaS upload, no desktop install.
+  </p>
+
+  <div class="prose-block">
+    <h2>WebVTT on short-form and HTML5 workflows</h2>
+    <p>
+      <strong>WebVTT</strong> (.vtt) is the caption format many HTML5 players and export
+      presets expect. Vertical editors may give you SRT for some outputs and VTT for others.
+      Timestamps in VTT use a <strong>dot</strong> before milliseconds (
+      <code>00:00:01.000 --> 00:00:04.000</code>), not the comma used in .srt.
+    </p>
+    <p>
+      If you shift an SRT file with comma times but save as .vtt without converting, players
+      may reject the file.       Use a dedicated
+      <a href="/tools/vtt-time-shift/">VTT time shift tool</a> when your source is already WebVTT.
+      Convert formats with <a href="/tools/srt-to-vtt/">SRT to VTT</a> or
+      <a href="/tools/vtt-to-srt/">VTT to SRT</a> when your pipeline uses both.
+    </p>
+
+    <h2>Constant delay vs drift</h2>
+    <p>
+      A <strong>constant delay</strong> means cue 1, cue 20, and cue 100 are all wrong by
+      roughly the same amount—typical after replacing audio on a dub, or player buffering in
+      review. A <strong>global offset</strong> fixes that in one step.
+    </p>
+    <p>
+      If error grows over the video, you have drift (frame rate or wrong source duration)—regenerate
+      captions or fix the timeline. See
+      <a href="/guides/fix-subtitle-sync-constant-delay/">fix constant subtitle delay</a> for the same
+      diagnosis on SRT workflows.
+    </p>
+
+    <h2>Step-by-step: shift VTT for vertical review</h2>
+    <ol>
+      <li>Export .vtt from your NLE or download from your hosting tool.</li>
+      <li>Play the hook: note whether text is early or late vs dialogue (estimate ms).</li>
+      <li>
+        Open the
+        <a href="/tools/vtt-time-shift/">VTT time shift</a> page, paste or open the file, enter
+        offset (try +500 ms if uniformly late).
+      </li>
+      <li>Download <code>shifted.vtt</code> and replace the sidecar or re-link in your project.</li>
+      <li>
+        Optional: check
+        <a href="/tools/line-length/">caption line length</a> for on-screen safe margins on 9:16.
+      </li>
+    </ol>
+
+    <h2>Typical offsets (vertical / dub)</h2>
+    <table>
+      <thead><tr><th>Situation</th><th>Starting offset</th></tr></thead>
+      <tbody>
+        <tr><td>Dub audio replaced original</td><td>+300 ms to +800 ms</td></tr>
+        <tr><td>Captions lead dialogue</td><td>−150 ms to −400 ms</td></tr>
+        <tr><td>HTML5 preview feels sluggish</td><td>+100 ms to +250 ms</td></tr>
+      </tbody>
+    </table>
+
+    <h2>Still on SRT?</h2>
+    <p>
+      Many teams keep SRT for translation and convert late. For SubRip files, use
+      <a href="/tools/srt-time-shift/">SRT time shift</a> or read
+      <a href="/guides/shift-srt-timing-online-free/">shift SRT timing online</a>.
+    </p>
+  </div>
+
+  <p class="cta-row">
+    <a class="btn" href="/tools/vtt-time-shift/">Shift VTT timestamps (free)</a>
+  </p>
+
+  <SeoToolExtras
+    faqs={faqs}
+    toolName="VTT timestamp shift for vertical video"
+    toolDescription="Guide to fixing uniform WebVTT delay in the browser for short-form and HTML5 captions."
+    path="/guides/shift-vtt-timestamps-vertical-video/"
+    steps={steps}
+  />
+</BaseLayout>
+
+<style>
+  .cta-row { margin: 1.5rem 0 2rem; }
+  .prose-block table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.95rem; }
+  .prose-block th, .prose-block td { border: 1px solid #334155; padding: 0.5rem 0.75rem; text-align: left; }
+</style>

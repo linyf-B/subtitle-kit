@@ -1,0 +1,142 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import SeoToolExtras from "../../../components/SeoToolExtras.astro";
+
+const faqs = [
+  {
+    question: "How do I shift WebVTT timestamps online?",
+    answer:
+      "Paste your .vtt file or open it from your device, enter an offset in seconds or milliseconds, and apply. All cues move together—ideal when captions are uniformly early or late on vertical or HTML5 video.",
+  },
+  {
+    question: "Is my VTT file uploaded to your server?",
+    answer:
+      "No. WebVTT is parsed and shifted in your browser with JavaScript. Subtitle Kit does not receive your caption content.",
+  },
+  {
+    question: "Does this support the WEBVTT header?",
+    answer:
+      "Yes. The tool reads standard WebVTT with a WEBVTT header and writes a valid file back with dot milliseconds (HH:MM:SS.mmm --> HH:MM:SS.mmm).",
+  },
+  {
+    question: "VTT vs SRT—which should I use?",
+    answer:
+      "WebVTT (.vtt) is common for HTML5 players, YouTube exports, and short-form pipelines. SubRip (.srt) uses commas in timestamps. Use our SRT time shift for .srt files.",
+  },
+  {
+    question: "Can I use a negative offset?",
+    answer:
+      "Yes. Negative values move captions earlier; positive values delay them. Timestamps clamp at zero so cues never go negative.",
+  },
+];
+
+const steps = [
+  "Paste WebVTT text or choose a .vtt file (stays on your device).",
+  "Enter offset in seconds or milliseconds (negative moves captions earlier).",
+  "Click Apply shift, preview in your player, then Download .vtt.",
+];
+---
+
+<BaseLayout
+  title="VTT time shift — offset WebVTT captions online"
+  description="Shift every WebVTT cue forward or backward by seconds or milliseconds. Free, private, in-browser. Paste or open .vtt files."
+  canonicalPath="/tools/vtt-time-shift/"
+>
+  <p class="badge">No upload to server · Runs in browser</p>
+  <h1>VTT time shift</h1>
+  <p class="lede">
+    Fix constant WebVTT delay: shift all cues together for HTML5 video, Reels exports, or
+    player preview—then download a corrected .vtt file without uploading to a server.
+  </p>
+
+  <div class="tool-panel" id="vtt-shift-app">
+    <label for="vtt-file">Open .vtt file (optional)</label>
+    <input type="file" id="vtt-file" accept=".vtt,text/vtt,text/plain" />
+    <p class="hint">Or paste content below. Processing stays on your device.</p>
+    <label for="vtt-in">WebVTT input</label>
+    <textarea
+      id="vtt-in"
+      placeholder="WEBVTT&#10;&#10;00:00:01.000 --> 00:00:04.000&#10;Hello"></textarea>
+    <div class="grid-2">
+      <div>
+        <label for="offset">Offset (negative allowed)</label>
+        <input type="number" id="offset" step="0.001" value="0.5" />
+      </div>
+      <div>
+        <label for="unit">Unit</label>
+        <select id="unit">
+          <option value="s">Seconds</option>
+          <option value="ms">Milliseconds</option>
+        </select>
+      </div>
+    </div>
+    <button type="button" id="run-shift">Apply shift</button>
+    <label for="vtt-out" style="margin-top: 1rem">Result</label>
+    <textarea id="vtt-out" readonly></textarea>
+    <button type="button" id="download-vtt" class="btn">Download .vtt</button>
+  </div>
+
+  <div class="prose-block">
+    <h2>When to shift WebVTT instead of SRT</h2>
+    <p>
+      Use this tool when your workflow already outputs <strong>.vtt</strong>—for example
+      HTML5 <code>&lt;track&gt;</code> captions, some social export presets, or players that
+      expect dot-separated timestamps. If you only have .srt, use the
+      <a href="/tools/srt-time-shift/">SRT time shift</a> tool instead.
+    </p>
+    <p>
+      For vertical video line breaks after timing fixes, pair with the
+      <a href="/tools/line-length/">caption line length checker</a>.
+    </p>
+  </div>
+
+  <SeoToolExtras
+    faqs={faqs}
+    toolName="VTT Time Shift"
+    toolDescription="Shift all WebVTT subtitle timestamps forward or backward in the browser without uploading files."
+    path="/tools/vtt-time-shift/"
+    steps={steps}
+  />
+</BaseLayout>
+
+<script>
+  import { parseVtt, serializeVtt, shiftVtt } from "../../../lib/vtt";
+
+  const input = document.getElementById("vtt-in") as HTMLTextAreaElement;
+  const fileInput = document.getElementById("vtt-file") as HTMLInputElement;
+  const offsetEl = document.getElementById("offset") as HTMLInputElement;
+  const unitEl = document.getElementById("unit") as HTMLSelectElement;
+  const output = document.getElementById("vtt-out") as HTMLTextAreaElement;
+
+  fileInput?.addEventListener("change", () => {
+    const file = fileInput.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      input.value = String(reader.result ?? "");
+    };
+    reader.readAsText(file);
+  });
+
+  document.getElementById("run-shift")?.addEventListener("click", () => {
+    const cues = parseVtt(input.value);
+    if (!cues.length) {
+      output.value =
+        "No valid WebVTT cues found. Check format (WEBVTT header and HH:MM:SS.mmm --> ...).";
+      return;
+    }
+    const raw = parseFloat(offsetEl.value) || 0;
+    const offsetMs = unitEl.value === "ms" ? raw : raw * 1000;
+    output.value = serializeVtt(shiftVtt(cues, offsetMs));
+  });
+
+  document.getElementById("download-vtt")?.addEventListener("click", () => {
+    if (!output.value.trim()) return;
+    const blob = new Blob([output.value], { type: "text/vtt;charset=utf-8" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "shifted.vtt";
+    a.click();
+    URL.revokeObjectURL(a.href);
+  });
+</script>

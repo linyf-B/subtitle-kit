@@ -1,0 +1,117 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import SeoToolExtras from "../../../components/SeoToolExtras.astro";
+
+const faqs = [
+  {
+    question: "How do I convert SRT to WebVTT online?",
+    answer:
+      "Paste SubRip (.srt) content or open a file, click Convert, and download .vtt. Timestamps change from comma to dot format and a WEBVTT header is added.",
+  },
+  {
+    question: "Is my subtitle file uploaded?",
+    answer:
+      "No. Conversion runs in your browser with JavaScript only.",
+  },
+  {
+    question: "Will cue text and timing stay the same?",
+    answer:
+      "Start and end times are preserved; only the format changes to valid WebVTT. Re-import to your player or NLE and spot-check the first cue.",
+  },
+  {
+    question: "Can I convert back to SRT?",
+    answer:
+      "Yes. Use our VTT to SRT converter if you need SubRip again after editing in a VTT-only tool.",
+  },
+  {
+    question: "Do I need to shift timing after convert?",
+    answer:
+      "Conversion does not change sync. If captions are late, use VTT time shift after converting or shift SRT before convert.",
+  },
+];
+
+const steps = [
+  "Paste SRT or open a .srt file.",
+  "Click Convert to WebVTT.",
+  "Download .vtt or copy from the result box.",
+];
+---
+
+<BaseLayout
+  title="SRT to VTT converter — SubRip to WebVTT online"
+  description="Convert .srt to .vtt in your browser. Free SubRip to WebVTT with correct dot timestamps and WEBVTT header. No upload."
+  canonicalPath="/tools/srt-to-vtt/"
+>
+  <p class="badge">No upload to server · Runs in browser</p>
+  <h1>SRT to VTT</h1>
+  <p class="lede">
+    Turn SubRip subtitles into WebVTT for HTML5 players and platforms that require .vtt—without
+    uploading files to a converter site.
+  </p>
+
+  <div class="tool-panel">
+    <label for="srt-file">Open .srt file (optional)</label>
+    <input type="file" id="srt-file" accept=".srt,text/plain" />
+    <label for="srt-in">SRT input</label>
+    <textarea id="srt-in" placeholder="1&#10;00:00:01,000 --> 00:00:04,000&#10;Hello"></textarea>
+    <button type="button" id="run-convert">Convert to WebVTT</button>
+    <label for="vtt-out" style="margin-top: 1rem">WebVTT result</label>
+    <textarea id="vtt-out" readonly></textarea>
+    <button type="button" id="download-vtt" class="btn">Download .vtt</button>
+  </div>
+
+  <div class="prose-block">
+    <p>
+      Related:
+      <a href="/tools/vtt-to-srt/">VTT to SRT</a>,
+      <a href="/tools/vtt-time-shift/">VTT time shift</a>,
+      <a href="/tools/srt-time-shift/">SRT time shift</a>.
+    </p>
+  </div>
+
+  <SeoToolExtras
+    faqs={faqs}
+    toolName="SRT to VTT Converter"
+    toolDescription="Convert SubRip SRT files to WebVTT locally in the browser."
+    path="/tools/srt-to-vtt/"
+    steps={steps}
+  />
+</BaseLayout>
+
+<script>
+  import { parseSrt } from "../../../lib/srt";
+  import { cuesToVttText } from "../../../lib/vtt";
+
+  const input = document.getElementById("srt-in") as HTMLTextAreaElement;
+  const fileInput = document.getElementById("srt-file") as HTMLInputElement;
+  const output = document.getElementById("vtt-out") as HTMLTextAreaElement;
+
+  fileInput?.addEventListener("change", () => {
+    const file = fileInput.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      input.value = String(reader.result ?? "");
+    };
+    reader.readAsText(file);
+  });
+
+  document.getElementById("run-convert")?.addEventListener("click", () => {
+    const cues = parseSrt(input.value);
+    if (!cues.length) {
+      output.value = "No valid SRT cues found.";
+      return;
+    }
+    output.value = cuesToVttText(cues);
+  });
+
+  document.getElementById("download-vtt")?.addEventListener("click", () => {
+    if (!output.value.trim()) return;
+    const blob = new Blob([output.value], { type: "text/vtt;charset=utf-8" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "converted.vtt";
+    a.click();
+    URL.revokeObjectURL(a.href);
+  });
+</script>

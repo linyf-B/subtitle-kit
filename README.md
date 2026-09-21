@@ -90,6 +90,9 @@ MIT License — 见 [LICENSE](./LICENSE)。
 ## 工具列表
 
 - `/tools/srt-time-shift/` — SRT 整体时间偏移
+- `/tools/vtt-time-shift/` — WebVTT 整体时间偏移
+- `/tools/srt-to-vtt/` — SRT 转 WebVTT
+- `/tools/vtt-to-srt/` — WebVTT 转 SRT
 - `/tools/srt-to-text/` — SRT 转纯文本
 - `/tools/line-length/` — 字幕行字数检查
 - `/tools/read-time/` — 旁白时长估算
