@@ -93,3 +93,14 @@
 ## 8. 变更（新工具 / 改北极星）
 
 须你明确说「加工具 xxx」或改 PLAN-50USD；**「继续 SEO」不触发 §8**。
+
+---
+
+## 9. Git 分工（固定）
+
+| 谁 | 做什么 |
+|----|--------|
+| **Agent** | 每次做完仓库改动 → `npm run build` 通过 → **`python scripts/git_commit.py "subject" "body"`**（已提交到本地 `main`） |
+| **你** | **只 `git push`**（可用 `E:\soft\GIT\Git\cmd\git.exe -C ... push origin main`） |
+
+Agent **不 push**。你说「我只 push」= 默认按上表执行。
