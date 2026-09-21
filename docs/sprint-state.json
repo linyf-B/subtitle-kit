@@ -14,7 +14,7 @@
     "delay-subtitles-500ms-dubbing"
   ],
   "redditPosts": 0,
-  "directorySubmits": 0,
+  "directorySubmits": 1,
   "phLaunched": false,
   "phScheduled": true,
   "phPath": "A",
@@ -27,5 +27,5 @@
     "source": "首页 URL 已 indexed；Pages 报表 processing；sitemap 线上 200，GSC 需重交 sitemap-index.xml"
   },
   "weeklyLog": [],
-  "notes": "PH 已排期+站脚徽章。Week3 两篇 guide 已本地新增。手动：GSC sitemap Success、Reddit×2、目录×2、PH Launch 日回评。"
+  "notes": "Tolodora live: https://tolodora.com/software/subtitle-kit。PH 已排期+站脚徽章。手动：FreemiumTools 目录、GSC sitemap、Reddit×2、PH Launch 日回评。"
 }

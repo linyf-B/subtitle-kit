@@ -38,21 +38,38 @@ const fullTitle = title.includes("Subtitle Kit") ? title : `${title} | Subtitle 
       <p>Ad space — connect AdSense after you have steady traffic.</p>
     </aside>
     <footer class="site-footer">
-      <p class="ph-badge">
-        <a
-          href="https://www.producthunt.com/products/subtitle-kit?embed=true&utm_source=badge-featured&utm_medium=badge&utm_campaign=badge-subtitle-kit"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <img
-            src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1256665&theme=light"
-            alt="Subtitle Kit - Browser-only SRT tools—shift timing, no upload | Product Hunt"
-            width="250"
-            height="54"
-            loading="lazy"
-          />
-        </a>
-      </p>
+      <div class="launch-badges">
+        <p class="launch-badge">
+          <a
+            href="https://www.producthunt.com/products/subtitle-kit?embed=true&utm_source=badge-featured&utm_medium=badge&utm_campaign=badge-subtitle-kit"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <img
+              src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1256665&theme=light"
+              alt="Subtitle Kit - Browser-only SRT tools—shift timing, no upload | Product Hunt"
+              width="250"
+              height="54"
+              loading="lazy"
+            />
+          </a>
+        </p>
+        <p class="launch-badge">
+          <a
+            href="https://tolodora.com/software/subtitle-kit"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <img
+              src="https://tolodora.com/badge/featured-on-tolodora.svg"
+              alt="Featured on Tolodora"
+              width="220"
+              height="44"
+              loading="lazy"
+            />
+          </a>
+        </p>
+      </div>
       <p>All tools run in your browser. Files are not uploaded.</p>
       <p>
         <a href="/privacy/">Privacy</a>
@@ -135,10 +152,18 @@ const fullTitle = title.includes("Subtitle Kit") ? title : `${title} | Subtitle 
     color: var(--muted);
     border-top: 1px solid var(--border);
   }
-  .ph-badge {
+  .launch-badges {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 0.75rem 1rem;
     margin: 0 0 1rem;
   }
-  .ph-badge img {
+  .launch-badge {
+    margin: 0;
+  }
+  .launch-badge img {
     display: inline-block;
     height: auto;
     max-width: 100%;
