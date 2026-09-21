@@ -38,6 +38,21 @@ const fullTitle = title.includes("Subtitle Kit") ? title : `${title} | Subtitle 
       <p>Ad space — connect AdSense after you have steady traffic.</p>
     </aside>
     <footer class="site-footer">
+      <p class="ph-badge">
+        <a
+          href="https://www.producthunt.com/products/subtitle-kit?embed=true&utm_source=badge-featured&utm_medium=badge&utm_campaign=badge-subtitle-kit"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <img
+            src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1256665&theme=light"
+            alt="Subtitle Kit - Browser-only SRT tools—shift timing, no upload | Product Hunt"
+            width="250"
+            height="54"
+            loading="lazy"
+          />
+        </a>
+      </p>
       <p>All tools run in your browser. Files are not uploaded.</p>
       <p>
         <a href="/privacy/">Privacy</a>
@@ -119,6 +134,14 @@ const fullTitle = title.includes("Subtitle Kit") ? title : `${title} | Subtitle 
     font-size: 0.85rem;
     color: var(--muted);
     border-top: 1px solid var(--border);
+  }
+  .ph-badge {
+    margin: 0 0 1rem;
+  }
+  .ph-badge img {
+    display: inline-block;
+    height: auto;
+    max-width: 100%;
   }
   .ad-slot {
     max-width: 720px;
