@@ -20,6 +20,11 @@ GUIDE_QUEUE = [
     {"week": 3, "slug": "delay-subtitles-500ms-dubbing", "tool": "/tools/srt-time-shift/"},
     {"week": 4, "slug": "browser-subtitle-tools-privacy", "tool": "/"},
     {"week": 4, "slug": "srt-offset-milliseconds-lip-sync", "tool": "/tools/srt-time-shift/"},
+    {"week": 5, "slug": "srt-to-vtt-converter-online", "tool": "/tools/srt-to-vtt/"},
+    {"week": 5, "slug": "vtt-to-srt-converter-online", "tool": "/tools/vtt-to-srt/"},
+    {"week": 5, "slug": "strip-html-tags-from-subtitles", "tool": "/tools/strip-html/"},
+    {"week": 6, "slug": "merge-split-srt-cues-online", "tool": "/tools/merge-split-cues/"},
+    {"week": 6, "slug": "subtitle-sync-frames-to-milliseconds", "tool": "/tools/fps-offset/"},
 ]
 
 WEEK_TASKS = {
@@ -69,9 +74,10 @@ def sprint_week(day: int) -> int:
     return min(4, (day - 1) // 7 + 1)
 
 
-def pending_guides(state: dict, week: int) -> list[dict]:
+def pending_guides(state: dict, _week: int) -> list[dict]:
+    """Next SEO guides in GUIDE_QUEUE order (not gated by sprint week)."""
     done = set(state.get("guidesDone") or []) | set(guides_on_disk())
-    return [g for g in GUIDE_QUEUE if g["week"] <= week and g["slug"] not in done]
+    return [g for g in GUIDE_QUEUE if g["slug"] not in done]
 
 
 def kpi_status(metrics: dict) -> dict:

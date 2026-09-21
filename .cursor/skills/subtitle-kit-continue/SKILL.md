@@ -14,7 +14,7 @@ description: >-
 **范围：仅本仓库 `subtitle-kit`。** 不复制到 `~/.cursor/skills/`；不在其他项目里执行同名流程。
 
 **项目根：** 含 `package.json`（`"name": "subtitle-kit"`）与 `docs/sprint-state.json` 的目录。  
-**计划：** [docs/PLAN-30DAY-SPRINT.md](../../../docs/PLAN-30DAY-SPRINT.md) · [docs/PLAN-50USD-DAY.md](../../../docs/PLAN-50USD-DAY.md) · [docs/seo-outreach.md](../../../docs/seo-outreach.md)  
+**计划：** [docs/PLAN-30DAY-SPRINT.md](../../../docs/PLAN-30DAY-SPRINT.md) · [docs/PLAN-50USD-DAY.md](../../../docs/PLAN-50USD-DAY.md) · [docs/seo-outreach.md](../../../docs/seo-outreach.md) · **[docs/SEO-CONTINUE-PLAN.md](../../../docs/SEO-CONTINUE-PLAN.md)**（「继续 SEO」队列）  
 **状态：** [docs/sprint-state.json](../../../docs/sprint-state.json)
 
 用户在本项目里说 **「继续」** 时，按下面顺序**全部执行**，不要只给建议。
@@ -33,7 +33,9 @@ description: >-
 
 ## 0b. 触发
 
-匹配（且 §0 已通过）：继续、今日继续、subtitle-kit 继续、跑 sprint、30天 sprint 下一步。
+匹配（且 §0 已通过）：继续、继续 SEO、继续seo、今日继续、subtitle-kit 继续、跑 sprint、30天 sprint 下一步。
+
+**开发：** 新工具见 [SEO-CONTINUE-PLAN §2](../../../docs/SEO-CONTINUE-PLAN.md)（已封板）。「继续 SEO」**只**写 guide / 改 title，不新建 `/tools/` 页。
 
 ---
 

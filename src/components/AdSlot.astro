@@ -1,0 +1,103 @@
+---
+import { getAdConfig, hasDisplayAds } from "../lib/ads";
+
+const config = getAdConfig();
+const live = hasDisplayAds(config);
+const showAdsenseUnit = Boolean(config.adsenseClient && config.adsenseSlot);
+const showMonetag = Boolean(config.monetagScript);
+const showPropeller = Boolean(config.propellerZone);
+const showAdsterra = Boolean(config.adsterraKey);
+---
+
+<aside
+  class:list={["ad-slot", "ad-slot--footer", live && "ad-slot--live"]}
+  aria-label="Advertisement"
+>
+  {
+    live ? (
+      <>
+        <p class="ad-label">Advertisement</p>
+        {showAdsenseUnit && (
+          <div class="ad-unit">
+            <ins
+              class="adsbygoogle"
+              style="display:block"
+              data-ad-client={config.adsenseClient}
+              data-ad-slot={config.adsenseSlot}
+              data-ad-format="auto"
+              data-full-width-responsive="true"
+            />
+            <script is:inline>
+              (window.adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+          </div>
+        )}
+        {showMonetag && (
+          <div
+            class="ad-unit"
+            id="monetag-slot"
+            data-zone={config.monetagZone}
+            data-src={config.monetagScript}
+          />
+        )}
+        {showPropeller && (
+          <div class="ad-unit">
+            <script is:inline async src="https://a.magsrv.com/ad-provider.js"></script>
+            <ins class="eas6a97888e31" data-zoneid={config.propellerZone} />
+            <script is:inline>
+              (window.AdProvider = window.AdProvider || []).push({ serve: {} });
+            </script>
+          </div>
+        )}
+        {showAdsterra && (
+          <div class="ad-unit" id="adsterra-slot" data-key={config.adsterraKey} />
+        )}
+      </>
+    ) : (
+      <p>Ad space — set PUBLIC_ADSENSE_CLIENT or another ad network ID to go live.</p>
+    )
+  }
+</aside>
+
+{
+  showMonetag && (
+    <script is:inline>
+      (function () {
+        var el = document.getElementById("monetag-slot");
+        if (!el) return;
+        var src = el.getAttribute("data-src");
+        if (!src) return;
+        var s = document.createElement("script");
+        s.async = true;
+        s.setAttribute("data-cfasync", "false");
+        var zone = el.getAttribute("data-zone");
+        if (zone) s.setAttribute("data-zone", zone);
+        s.src = src;
+        el.appendChild(s);
+      })();
+    </script>
+  )
+}
+
+{
+  showAdsterra && (
+    <script is:inline>
+      (function () {
+        var el = document.getElementById("adsterra-slot");
+        if (!el) return;
+        var key = el.getAttribute("data-key");
+        if (!key) return;
+        window.atOptions = {
+          key: key,
+          format: "iframe",
+          height: 250,
+          width: 300,
+          params: {},
+        };
+        var s = document.createElement("script");
+        s.src = "https://www.highperformanceformat.com/" + key + "/invoke.js";
+        el.appendChild(s);
+      })();
+    </script>
+  )
+}

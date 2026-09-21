@@ -99,3 +99,73 @@ export function maxLineLength(text: string): { max: number; lines: string[] } {
   }
   return { max, lines };
 }
+
+const HTML_ENTITY: Record<string, string> = {
+  "&amp;": "&",
+  "&lt;": "<",
+  "&gt;": ">",
+  "&quot;": '"',
+  "&#39;": "'",
+  "&nbsp;": " ",
+};
+
+export function stripHtmlTags(text: string): string {
+  let t = text.replace(/<[^>]*>/g, "");
+  t = t.replace(/&(?:amp|lt|gt|quot|#39|nbsp);/g, (m) => HTML_ENTITY[m] ?? m);
+  return t.replace(/\s+\n/g, "\n").trim();
+}
+
+export function stripHtmlInCues(cues: SrtCue[]): SrtCue[] {
+  return cues.map((c) => ({ ...c, text: stripHtmlTags(c.text) }));
+}
+
+/** Merge consecutive cues when gap between end and next start ≤ maxGapMs. */
+export function mergeConsecutiveCues(cues: SrtCue[], maxGapMs: number): SrtCue[] {
+  if (!cues.length) return [];
+  const merged: SrtCue[] = [];
+  let cur = { ...cues[0] };
+  for (let i = 1; i < cues.length; i++) {
+    const next = cues[i];
+    const gap = next.startMs - cur.endMs;
+    if (gap <= maxGapMs) {
+      cur.endMs = next.endMs;
+      cur.text = `${cur.text}\n${next.text}`;
+    } else {
+      merged.push({ ...cur, index: merged.length + 1 });
+      cur = { ...next };
+    }
+  }
+  merged.push({ ...cur, index: merged.length + 1 });
+  return merged.map((c, i) => ({ ...c, index: i + 1 }));
+}
+
+/** Split each cue with multiple lines into separate cues with evenly divided duration. */
+export function splitCuesByLine(cues: SrtCue[]): SrtCue[] {
+  const out: SrtCue[] = [];
+  for (const c of cues) {
+    const lines = c.text.split("\n").map((l) => l.trim()).filter(Boolean);
+    if (lines.length <= 1) {
+      out.push({ ...c, text: lines[0] ?? c.text, index: out.length + 1 });
+      continue;
+    }
+    const total = Math.max(1, c.endMs - c.startMs);
+    const slice = Math.floor(total / lines.length);
+    lines.forEach((line, i) => {
+      const startMs = c.startMs + i * slice;
+      const endMs = i === lines.length - 1 ? c.endMs : c.startMs + (i + 1) * slice;
+      out.push({ index: out.length + 1, startMs, endMs, text: line });
+    });
+  }
+  return out.map((c, i) => ({ ...c, index: i + 1 }));
+}
+
+/** Convert milliseconds to frame count at given fps (for sync math). */
+export function msToFrames(ms: number, fps: number): number {
+  if (fps <= 0) return 0;
+  return (ms / 1000) * fps;
+}
+
+export function framesToMs(frames: number, fps: number): number {
+  if (fps <= 0) return 0;
+  return (frames / fps) * 1000;
+}

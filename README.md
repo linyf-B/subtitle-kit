@@ -3,7 +3,7 @@
 **Live site:** [https://subtitle-kit.pages.dev](https://subtitle-kit.pages.dev)  
 **Repository:** [github.com/linyf-B/subtitle-kit](https://github.com/linyf-B/subtitle-kit)
 
-**系统计划（0 → $50/日）：** [docs/PLAN-50USD-DAY.md](./docs/PLAN-50USD-DAY.md) · **30 天先做：** [docs/PLAN-30DAY-SPRINT.md](./docs/PLAN-30DAY-SPRINT.md) · 外链：[docs/seo-outreach.md](./docs/seo-outreach.md)
+**系统计划（0 → $50/日）：** [docs/PLAN-50USD-DAY.md](./docs/PLAN-50USD-DAY.md) · **30 天先做：** [docs/PLAN-30DAY-SPRINT.md](./docs/PLAN-30DAY-SPRINT.md) · **继续 SEO：** [docs/SEO-CONTINUE-PLAN.md](./docs/SEO-CONTINUE-PLAN.md) · 外链：[docs/seo-outreach.md](./docs/seo-outreach.md)
 
 面向剪辑/短剧/字幕工作流的 **浏览器本地工具站**（英文 SEO），可 **零域名** 部署到 Cloudflare Pages。
 ## 本地预览
@@ -77,11 +77,16 @@ npm run dev
    - Cloudflare 或任意注册商买域名 → Pages 项目 **Custom domains** 绑定
    - 把 `SITE_URL` 和 `public/robots.txt` 里的 sitemap 地址改成新域名 → 重新部署
 
-## 变现预留
+## 变现（国际展示广告）
 
-- 页脚与 layout 里已有 **广告占位**；建议 **日访问稳定后** 再申请 [Google AdSense](https://www.google.com/adsense/)，将脚本放入 `BaseLayout.astro` 的广告区域。
-- About 页已说明可能展示广告（AdSense 审核常用）。
-- 后续可加：批量限额 → 低价订阅（需 Stripe + 后端，当前未包含）。
+页脚广告位支持 **AdSense / Monetag / PropellerAds / Adsterra**（仅 Banner/Native，不含弹窗）。未配置 ID 时显示占位，不加载第三方脚本。
+
+1. 申请账号并创建 **展示广告位**（不要用 Popunder / OnClick，以免 AdSense 封号）
+2. 把 ID 写进 Cloudflare Pages → **Environment variables**（Production），变量名见 [`.env.example`](./.env.example)
+3. 重新部署；打开 `https://你的站点/ads.txt` 应能看到 `google.com, pub-…, DIRECT, …`
+4. AdSense 申请期至少填 `PUBLIC_ADSENSE_CLIENT`（会写入 meta + adsbygoogle.js，供站点验证）
+
+本地预览：复制 `.env.example` 为 `.env` 后 `npm run dev`。
 
 ## 开源
 
@@ -96,8 +101,11 @@ MIT License — 见 [LICENSE](./LICENSE)。
 - `/tools/srt-to-text/` — SRT 转纯文本
 - `/tools/line-length/` — 字幕行字数检查
 - `/tools/read-time/` — 旁白时长估算
+- `/tools/strip-html/` — 去除 SRT 内 HTML 标签
+- `/tools/merge-split-cues/` — 合并/拆分 SRT 轴
+- `/tools/fps-offset/` — 帧率 ↔ 毫秒偏移计算
 
 ## 技术
 
 - Astro 5 静态站 + `@astrojs/sitemap`
-- 工具逻辑在浏览器执行，见 `src/lib/srt.ts`
+- 工具逻辑在浏览器执行，见 `src/lib/srt.ts`、`src/lib/vtt.ts`

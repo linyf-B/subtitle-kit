@@ -4,7 +4,8 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 
 <BaseLayout
   title="Privacy — Subtitle Kit"
-  description="Subtitle Kit processes files locally in your browser. No upload, no account required."
+  description="Subtitle Kit processes files locally in your browser. Ads, if enabled, are served by third parties and do not receive your subtitle files."
+  canonicalPath="/privacy/"
 >
   <h1>Privacy</h1>
   <p>
@@ -14,8 +15,26 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
   </p>
   <p>
     When you deploy this site, the hosting provider (e.g. Cloudflare Pages) may log
-    standard HTTP requests (IP, user agent) for security and delivery. Third-party ads or
-    analytics, if enabled later, are governed by those providers' policies.
+    standard HTTP requests (IP, user agent) for security and delivery.
   </p>
-  <p>Last updated: 2026-09-20</p>
+  <h2>Advertising</h2>
+  <p>
+    Pages may load display ads from one or more of these networks when the site operator
+    has configured publisher IDs: <a href="https://www.google.com/adsense/">Google AdSense</a>,
+    <a href="https://monetag.com/">Monetag</a>,
+    <a href="https://propellerads.com/">PropellerAds</a>, and
+    <a href="https://adsterra.com/">Adsterra</a>. Those vendors may set cookies or collect
+    device and IP data under their own policies:
+  </p>
+  <ul>
+    <li><a href="https://policies.google.com/privacy">Google Privacy Policy</a></li>
+    <li><a href="https://monetag.com/privacy-policy/">Monetag Privacy Policy</a></li>
+    <li><a href="https://propellerads.com/privacy/">PropellerAds Privacy Policy</a></li>
+    <li><a href="https://adsterra.com/privacy-policy/">Adsterra Privacy Policy</a></li>
+  </ul>
+  <p>
+    Ad scripts do not receive the subtitle files you open or paste. You can block ads with
+    a browser content blocker; tools will keep working.
+  </p>
+  <p>Last updated: 2026-09-21</p>
 </BaseLayout>

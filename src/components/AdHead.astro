@@ -1,0 +1,17 @@
+---
+import { getAdConfig } from "../lib/ads";
+
+const { adsenseClient } = getAdConfig();
+const adsenseSrc = adsenseClient
+  ? `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adsenseClient}`
+  : "";
+---
+
+{
+  adsenseClient && (
+    <>
+      <meta name="google-adsense-account" content={adsenseClient} />
+      <script is:inline async crossorigin="anonymous" src={adsenseSrc}></script>
+    </>
+  )
+}

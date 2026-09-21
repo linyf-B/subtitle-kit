@@ -1,0 +1,129 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import SeoToolExtras from "../../../components/SeoToolExtras.astro";
+
+const faqs = [
+  {
+    question: "What does merge SRT cues do?",
+    answer:
+      "Combines consecutive subtitles when the gap between them is smaller than your threshold—for example merging two short lines into one readable cue.",
+  },
+  {
+    question: "What does split do?",
+    answer:
+      "Turns each multi-line cue into separate cues with evenly divided duration—useful before vertical video or one-line-per-shot delivery.",
+  },
+  {
+    question: "Is processing local?",
+    answer: "Yes. Merge and split run in your browser only.",
+  },
+  {
+    question: "Default merge gap?",
+    answer: "100 ms—adjust if your editor inserts larger gaps between merged lines.",
+  },
+  {
+    question: "Will split change total duration?",
+    answer: "Split keeps the original start of the first line and end of the last line within each cue block.",
+  },
+];
+
+const steps = [
+  "Paste SRT or open a file.",
+  "Choose Merge or Split, set merge max gap if merging.",
+  "Download the result .srt.",
+];
+---
+
+<BaseLayout
+  title="Merge or split SRT cues — online subtitle editor"
+  description="Merge consecutive SRT lines or split multi-line cues by time. Free browser tool, no upload."
+  canonicalPath="/tools/merge-split-cues/"
+>
+  <p class="badge">No upload to server · Runs in browser</p>
+  <h1>Merge / split SRT cues</h1>
+  <p class="lede">
+    Combine choppy one-word cues or split stacked lines into separate timed entries—common fixes
+    before short-form export or translation handoff.
+  </p>
+
+  <div class="tool-panel">
+    <label for="srt-file">Open .srt file (optional)</label>
+    <input type="file" id="srt-file" accept=".srt,text/plain" />
+    <label for="srt-in">SRT input</label>
+    <textarea id="srt-in"></textarea>
+    <div class="grid-2">
+      <div>
+        <label for="mode">Action</label>
+        <select id="mode">
+          <option value="merge">Merge consecutive cues</option>
+          <option value="split">Split cues by line</option>
+        </select>
+      </div>
+      <div>
+        <label for="gap">Max gap for merge (ms)</label>
+        <input type="number" id="gap" value="100" min="0" step="10" />
+      </div>
+    </div>
+    <button type="button" id="run-action">Apply</button>
+    <label for="srt-out" style="margin-top: 1rem">Result</label>
+    <textarea id="srt-out" readonly></textarea>
+    <button type="button" id="download-srt" class="btn">Download .srt</button>
+  </div>
+
+  <SeoToolExtras
+    faqs={faqs}
+    toolName="Merge Split SRT Cues"
+    toolDescription="Merge or split SRT subtitle cues in the browser."
+    path="/tools/merge-split-cues/"
+    steps={steps}
+  />
+</BaseLayout>
+
+<script>
+  import {
+    mergeConsecutiveCues,
+    parseSrt,
+    serializeSrt,
+    splitCuesByLine,
+  } from "../../../lib/srt";
+
+  const input = document.getElementById("srt-in") as HTMLTextAreaElement;
+  const fileInput = document.getElementById("srt-file") as HTMLInputElement;
+  const output = document.getElementById("srt-out") as HTMLTextAreaElement;
+  const modeEl = document.getElementById("mode") as HTMLSelectElement;
+  const gapEl = document.getElementById("gap") as HTMLInputElement;
+
+  fileInput?.addEventListener("change", () => {
+    const file = fileInput.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      input.value = String(reader.result ?? "");
+    };
+    reader.readAsText(file);
+  });
+
+  document.getElementById("run-action")?.addEventListener("click", () => {
+    const cues = parseSrt(input.value);
+    if (!cues.length) {
+      output.value = "No valid SRT cues found.";
+      return;
+    }
+    const gap = parseInt(gapEl.value, 10) || 0;
+    const out =
+      modeEl.value === "split"
+        ? splitCuesByLine(cues)
+        : mergeConsecutiveCues(cues, gap);
+    output.value = serializeSrt(out);
+  });
+
+  document.getElementById("download-srt")?.addEventListener("click", () => {
+    if (!output.value.trim()) return;
+    const blob = new Blob([output.value], { type: "text/plain;charset=utf-8" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "edited.srt";
+    a.click();
+    URL.revokeObjectURL(a.href);
+  });
+</script>

@@ -4,6 +4,20 @@
   "sprintStart": "2026-09-20",
   "siteUrl": "https://subtitle-kit.pages.dev",
   "gscPropertyUrl": "https://search.google.com/search-console?resource_id=https%3A%2F%2Fsubtitle-kit.pages.dev%2F&after_verification_success=",
+  "seoPlanDoc": "docs/SEO-CONTINUE-PLAN.md",
+  "devBacklogComplete": true,
+  "devToolsDone": [
+    "srt-time-shift",
+    "srt-to-text",
+    "line-length",
+    "read-time",
+    "vtt-time-shift",
+    "srt-to-vtt",
+    "vtt-to-srt",
+    "strip-html",
+    "merge-split-cues",
+    "fps-offset"
+  ],
   "completedTaskIds": ["w1-guides-2", "w2-guides-34", "w1-push", "w3-guides-56"],
   "guidesDone": [
     "fix-subtitle-sync-constant-delay",
@@ -11,7 +25,8 @@
     "srt-to-text-for-translation",
     "subtitle-line-length-tiktok-reels",
     "voice-over-read-time-calculator",
-    "delay-subtitles-500ms-dubbing"
+    "delay-subtitles-500ms-dubbing",
+    "shift-vtt-timestamps-vertical-video"
   ],
   "redditPosts": 0,
   "directorySubmits": 1,
@@ -27,5 +42,5 @@
     "source": "首页 URL 已 indexed；Pages 报表 processing；sitemap 线上 200，GSC 需重交 sitemap-index.xml"
   },
   "weeklyLog": [],
-  "notes": "Tolodora live: https://tolodora.com/software/subtitle-kit。PH 已排期+站脚徽章。手动：FreemiumTools 目录、GSC sitemap、Reddit×2、PH Launch 日回评。"
+  "notes": "开发项已封板（见 devToolsDone）。说「继续 SEO」按 SEO-CONTINUE-PLAN + sprint_status nextGuide。待 push：VTT 批次 + 三工具 + 计划文档。手动：FreemiumTools、GSC sitemap、Reddit×2、PH Launch 日回评。"
 }

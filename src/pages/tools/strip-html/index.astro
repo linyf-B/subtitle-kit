@@ -1,0 +1,105 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import SeoToolExtras from "../../../components/SeoToolExtras.astro";
+
+const faqs = [
+  {
+    question: "Why remove HTML from subtitles?",
+    answer:
+      "Exports from YouTube, OCR, or web players sometimes include <i>, <font>, or <b> tags. Plain text is safer for translation, NLE import, and players that render raw tags on screen.",
+  },
+  {
+    question: "Is my file uploaded?",
+    answer: "No. Stripping runs locally in your browser.",
+  },
+  {
+    question: "Are line breaks kept?",
+    answer: "Yes. Only tags are removed; cue timing and line breaks inside each cue stay the same.",
+  },
+  {
+    question: "Does this fix SSA/ASS styles?",
+    answer:
+      "This tool targets simple HTML-like tags in SRT text. Advanced ASS styling needs a dedicated ASS tool.",
+  },
+  {
+    question: "Can I use this on VTT?",
+    answer:
+      "Convert VTT to SRT first if needed, or paste SRT after export. For WebVTT-only files, use VTT to SRT then strip.",
+  },
+];
+
+const steps = [
+  "Paste SRT or open a .srt file.",
+  "Click Strip HTML tags.",
+  "Download cleaned .srt or copy the result.",
+];
+---
+
+<BaseLayout
+  title="Strip HTML from SRT subtitles — online, browser-only"
+  description="Remove HTML tags from SRT caption text. Free, private, in-browser. Keep timings, clean dialogue for editors and translators."
+  canonicalPath="/tools/strip-html/"
+>
+  <p class="badge">No upload to server · Runs in browser</p>
+  <h1>Strip HTML from SRT</h1>
+  <p class="lede">
+    Remove &lt;i&gt;, &lt;b&gt;, &lt;font&gt;, and similar tags from subtitle text while keeping
+    your cue times unchanged.
+  </p>
+
+  <div class="tool-panel">
+    <label for="srt-file">Open .srt file (optional)</label>
+    <input type="file" id="srt-file" accept=".srt,text/plain" />
+    <label for="srt-in">SRT input</label>
+    <textarea id="srt-in"></textarea>
+    <button type="button" id="run-strip">Strip HTML tags</button>
+    <label for="srt-out" style="margin-top: 1rem">Clean SRT</label>
+    <textarea id="srt-out" readonly></textarea>
+    <button type="button" id="download-srt" class="btn">Download .srt</button>
+  </div>
+
+  <SeoToolExtras
+    faqs={faqs}
+    toolName="Strip HTML from SRT"
+    toolDescription="Remove HTML tags from SRT subtitle text in the browser."
+    path="/tools/strip-html/"
+    steps={steps}
+  />
+</BaseLayout>
+
+<script>
+  import { parseSrt, serializeSrt, stripHtmlInCues } from "../../../lib/srt";
+
+  const input = document.getElementById("srt-in") as HTMLTextAreaElement;
+  const fileInput = document.getElementById("srt-file") as HTMLInputElement;
+  const output = document.getElementById("srt-out") as HTMLTextAreaElement;
+
+  fileInput?.addEventListener("change", () => {
+    const file = fileInput.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      input.value = String(reader.result ?? "");
+    };
+    reader.readAsText(file);
+  });
+
+  document.getElementById("run-strip")?.addEventListener("click", () => {
+    const cues = parseSrt(input.value);
+    if (!cues.length) {
+      output.value = "No valid SRT cues found.";
+      return;
+    }
+    output.value = serializeSrt(stripHtmlInCues(cues));
+  });
+
+  document.getElementById("download-srt")?.addEventListener("click", () => {
+    if (!output.value.trim()) return;
+    const blob = new Blob([output.value], { type: "text/plain;charset=utf-8" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "clean.srt";
+    a.click();
+    URL.revokeObjectURL(a.href);
+  });
+</script>

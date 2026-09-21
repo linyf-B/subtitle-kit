@@ -1,4 +1,7 @@
 ---
+import AdHead from "../components/AdHead.astro";
+import AdSlot from "../components/AdSlot.astro";
+
 const { title, description, canonicalPath = Astro.url.pathname } = Astro.props;
 const site = Astro.site?.origin ?? "https://subtitle-kit.pages.dev";
 const canonical = new URL(canonicalPath, site).href;
@@ -19,6 +22,7 @@ const fullTitle = title.includes("Subtitle Kit") ? title : `${title} | Subtitle 
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
+    <AdHead />
   </head>
   <body>
     <header class="site-header">
@@ -35,9 +39,7 @@ const fullTitle = title.includes("Subtitle Kit") ? title : `${title} | Subtitle 
     <main class="site-main">
       <slot />
     </main>
-    <aside class="ad-slot ad-slot--footer" aria-label="Ad placeholder">
-      <p>Ad space — connect AdSense after you have steady traffic.</p>
-    </aside>
+    <AdSlot />
     <footer class="site-footer">
       <div class="launch-badges">
         <p class="launch-badge">
@@ -178,6 +180,23 @@ const fullTitle = title.includes("Subtitle Kit") ? title : `${title} | Subtitle 
     font-size: 0.8rem;
     color: var(--muted);
     text-align: center;
+  }
+  .ad-slot--live {
+    border-style: solid;
+    min-height: 90px;
+  }
+  .ad-slot--live .ad-label {
+    margin: 0 0 0.35rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .ad-slot--live .ad-unit {
+    margin: 0.5rem 0;
+    overflow: hidden;
+  }
+  .ad-slot--live .adsbygoogle {
+    display: block;
   }
   h1 {
     font-size: 1.65rem;

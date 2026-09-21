@@ -1,0 +1,125 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import SeoToolExtras from "../../../components/SeoToolExtras.astro";
+
+const faqs = [
+  {
+    question: "Why convert frames to milliseconds for subtitles?",
+    answer:
+      "Editors think in frames (23.976, 25, 29.97 fps) while SRT uses milliseconds. Converting one frame of offset helps lip-sync after frame-rate conform.",
+  },
+  {
+    question: "Which FPS should I pick?",
+    answer:
+      "Match your sequence or export: 23.976/24 film, 25 PAL, 29.97/30 NTSC or social. Drop-frame 29.97 uses the same fps value for rough offset math.",
+  },
+  {
+    question: "Does this shift my SRT file?",
+    answer:
+      "This is a calculator only. Copy the milliseconds into our SRT time shift tool to apply the offset.",
+  },
+  {
+    question: "Is data sent to a server?",
+    answer: "No. Math runs in your browser.",
+  },
+  {
+    question: "One frame at 24 fps equals how many ms?",
+    answer: "About 41.67 ms per frame at 24 fps—use the tool for exact values at your chosen rate.",
+  },
+];
+
+const steps = [
+  "Select project frame rate.",
+  "Enter frames (or milliseconds) to convert.",
+  "Use the result in SRT time shift or your NLE.",
+];
+---
+
+<BaseLayout
+  title="Subtitle FPS to milliseconds — frame offset calculator"
+  description="Convert video frames to milliseconds for SRT sync at 23.976, 24, 25, 29.97, or 30 fps. Free browser calculator."
+  canonicalPath="/tools/fps-offset/"
+>
+  <p class="badge">No upload to server · Runs in browser</p>
+  <h1>FPS ↔ milliseconds</h1>
+  <p class="lede">
+    Translate a one-frame (or multi-frame) offset into milliseconds before you
+    <a href="/tools/srt-time-shift/">shift SRT timing</a>—handy after frame-rate conversion or
+    conform.
+  </p>
+
+  <div class="tool-panel">
+    <label for="fps">Frame rate (fps)</label>
+    <select id="fps">
+      <option value="23.976">23.976 (film)</option>
+      <option value="24">24</option>
+      <option value="25">25 (PAL)</option>
+      <option value="29.97">29.97 (NTSC)</option>
+      <option value="30">30</option>
+    </select>
+    <div class="grid-2" style="margin-top: 1rem">
+      <div>
+        <label for="frames">Frames → ms</label>
+        <input type="number" id="frames" step="0.01" value="1" />
+        <p class="hint" id="frames-out">—</p>
+      </div>
+      <div>
+        <label for="ms-in">Milliseconds → frames</label>
+        <input type="number" id="ms-in" step="0.01" value="42" />
+        <p class="hint" id="ms-out">—</p>
+      </div>
+    </div>
+    <p class="hint" style="margin-top: 1rem">
+      One frame at this rate ≈ <strong id="one-frame">—</strong> ms
+    </p>
+  </div>
+
+  <div class="prose-block">
+    <p>
+      After conforming 24 fps footage to 25 fps, subs can sit one frame late. Compute the ms
+      equivalent, then apply it on
+      <a href="/tools/srt-time-shift/">SRT time shift</a>. For WebVTT, use
+      <a href="/tools/vtt-time-shift/">VTT time shift</a>.
+    </p>
+  </div>
+
+  <SeoToolExtras
+    faqs={faqs}
+    toolName="FPS to Milliseconds Calculator"
+    toolDescription="Convert frames to milliseconds for subtitle sync at common video frame rates."
+    path="/tools/fps-offset/"
+    steps={steps}
+  />
+</BaseLayout>
+
+<script>
+  import { framesToMs, msToFrames } from "../../../lib/srt";
+
+  const fpsEl = document.getElementById("fps") as HTMLSelectElement;
+  const framesEl = document.getElementById("frames") as HTMLInputElement;
+  const msInEl = document.getElementById("ms-in") as HTMLInputElement;
+  const framesOut = document.getElementById("frames-out") as HTMLParagraphElement;
+  const msOut = document.getElementById("ms-out") as HTMLParagraphElement;
+  const oneFrame = document.getElementById("one-frame") as HTMLElement;
+
+  function fps(): number {
+    return parseFloat(fpsEl.value) || 24;
+  }
+
+  function refresh(): void {
+    const rate = fps();
+    const msPer = framesToMs(1, rate);
+    oneFrame.textContent = msPer.toFixed(3);
+
+    const f = parseFloat(framesEl.value) || 0;
+    framesOut.textContent = `${f} frame(s) ≈ ${framesToMs(f, rate).toFixed(2)} ms`;
+
+    const ms = parseFloat(msInEl.value) || 0;
+    msOut.textContent = `${ms} ms ≈ ${msToFrames(ms, rate).toFixed(3)} frame(s)`;
+  }
+
+  fpsEl.addEventListener("change", refresh);
+  framesEl.addEventListener("input", refresh);
+  msInEl.addEventListener("input", refresh);
+  refresh();
+</script>
