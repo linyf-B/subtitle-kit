@@ -1,0 +1,165 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import SeoToolExtras from "../../../components/SeoToolExtras.astro";
+
+const faqs = [
+  {
+    question: "Should I fix lip sync in milliseconds or seconds?",
+    answer:
+      "Use milliseconds for fine tuning after dubbing—100 ms steps are easy to hear. Seconds fields are fine for rough +1 s errors. Most constant-delay fixes land between 200 ms and 800 ms.",
+  },
+  {
+    question: "Positive or negative SRT offset for late subtitles?",
+    answer:
+      "If text appears after the speaker, subtitles are late—apply a positive offset (move cues later). If text flashes before speech, use a negative offset.",
+  },
+  {
+    question: "How do frames relate to milliseconds?",
+    answer:
+      "At 24 fps one frame ≈ 41.67 ms; at 30 fps ≈ 33.33 ms; at 25 fps 40 ms. Use an FPS-to-ms calculator when your editor thinks in frames but your SRT tool wants ms.",
+  },
+  {
+    question: "Will shifting break the first subtitle at 00:00:00?",
+    answer:
+      "Good shifters clamp at zero so negative offsets do not create invalid negative timecodes. Preview the opening hook after any large negative shift.",
+  },
+  {
+    question: "Is lip sync the same as constant delay?",
+    answer:
+      "Constant delay looks like bad lip sync on every line. If sync drifts over the runtime, you need regeneration or FPS fixes—not a single ms offset.",
+  },
+  {
+    question: "Can I combine ms shift with frame-based edits?",
+    answer:
+      "Yes. Measure in frames in the NLE, convert to ms, apply globally in SRT, re-import. Avoid mixing per-cue manual edits with a global shift unless you know the order of operations.",
+  },
+];
+
+const steps = [
+  "Confirm constant delay on three cues (start, middle, end).",
+  "Estimate offset in ms (positive if subs are late vs speech).",
+  "Apply global shift in the SRT tool; download and spot-check lip sync.",
+  "Fine-tune in 50–100 ms steps if needed.",
+];
+---
+
+<BaseLayout
+  title="SRT offset in milliseconds for lip sync"
+  description="Fix uniform lip-sync errors with a millisecond SRT time shift. Convert frames to ms, choose sign, and verify in your player—browser tool, no upload."
+  canonicalPath="/guides/srt-offset-milliseconds-lip-sync/"
+>
+  <p class="badge">Guide · ~8 min read</p>
+  <h1>SRT offset in milliseconds: fix lip sync without re-timing every cue</h1>
+  <p class="lede">
+    When dialogue and subtitles disagree by the same gap on every line, you do not need to drag
+    hundreds of cues. A <strong>global millisecond offset</strong> on the SubRip file fixes lip
+    sync in one pass. This guide covers measurement, sign (+/−), frame-to-ms math, and when to
+    stop tweaking.
+  </p>
+
+  <div class="prose-block">
+    <h2>Lip sync vs drift (decide first)</h2>
+    <p>
+      <strong>Good candidate for ms offset:</strong> the actor’s mouth and the subtitle line are
+      consistently off by ~300 ms from the cold open through the end card.
+    </p>
+    <p>
+      <strong>Bad candidate:</strong> sync is acceptable at 00:02:00 but wrong by 1.5 s at
+      00:45:00. That is <strong>drift</strong>—often FPS, dropped frames, or wrong source duration.
+      Fix the timeline or re-export captions; a single offset will not save the whole file.
+    </p>
+    <p>
+      See <a href="/guides/fix-subtitle-sync-constant-delay/">fix constant subtitle delay</a> for
+      the three-spot test before you commit to a number.
+    </p>
+
+    <h2>Measure in milliseconds</h2>
+    <ol>
+      <li>Pick a sharp consonant ( “t”, “k”, “p” )—easier to see than vowels.</li>
+      <li>Note the time speech <em>starts</em> (player or NLE timecode).</li>
+      <li>Note when the subtitle <em>appears</em>.</li>
+      <li>Difference = how late or early the text is.</li>
+    </ol>
+    <p>
+      Example: speech at 01:02,400 and subtitle at 01:02,850 → text is
+      <strong>450 ms late</strong> → apply <strong>+450 ms</strong> to all cues.
+    </p>
+    <p>
+      Repeat on two other scenes. If all three agree within ~50 ms, one global shift is enough.
+    </p>
+
+    <h2>Sign convention (+ / −)</h2>
+    <table>
+      <thead><tr><th>What you see</th><th>Meaning</th><th>Offset</th></tr></thead>
+      <tbody>
+        <tr><td>Text after speech</td><td>Subs late</td><td><strong>+</strong> ms</td></tr>
+        <tr><td>Text before speech</td><td>Subs early</td><td><strong>−</strong> ms</td></tr>
+      </tbody>
+    </table>
+    <p>
+      Dubbing workflows often need <strong>+300 ms to +800 ms</strong> because replaced audio
+      starts slightly later than the original guide track. Short-form cuts sometimes need less.
+    </p>
+
+    <h2>Frames to milliseconds</h2>
+    <p>
+      Editors often nudge “two frames.” SubRip tools want milliseconds. Approximate:
+    </p>
+    <ul>
+      <li>24 fps: 1 frame ≈ 41.67 ms</li>
+      <li>25 fps: 1 frame = 40 ms</li>
+      <li>30 fps: 1 frame ≈ 33.33 ms</li>
+      <li>23.976 fps: 1 frame ≈ 41.71 ms</li>
+    </ul>
+    <p>
+      Use the <a href="/tools/fps-offset/">FPS ↔ ms offset calculator</a> when your notes are in
+      frames but your export is SRT. Then apply the result in
+      <a href="/tools/srt-time-shift/">SRT time shift</a>.
+    </p>
+
+    <h2>Apply the shift</h2>
+    <p>
+      Open the .srt in a browser tool, enter offset in ms (or seconds if the UI allows), preview
+      the first and last cue times, download <code>shifted.srt</code>, and re-link in Premiere,
+      DaVinci, VLC, or your delivery pipeline.
+    </p>
+    <p>
+      For WebVTT sidecars on HTML5 or vertical exports, use
+      <a href="/tools/vtt-time-shift/">VTT time shift</a> so dot-milliseconds stay valid.
+    </p>
+
+    <h2>Fine-tuning loop</h2>
+    <ol>
+      <li>Apply your best estimate (+500 ms, for example).</li>
+      <li>Check hook, mid-scene dialogue, and end.</li>
+      <li>If still slightly late, add +50 ms to +100 ms—not another full guess.</li>
+      <li>Stop when two reviewers agree; perfection past ±50 ms rarely matters on social video.</li>
+    </ol>
+
+    <h2>Related workflows</h2>
+    <p>
+      <a href="/guides/delay-subtitles-500ms-dubbing/">Delay subtitles 500 ms for dubbing</a> —
+      common starting point. <a href="/guides/shift-srt-timing-online-free/">Shift SRT online</a>
+      — privacy-first steps. After sync, run
+      <a href="/tools/line-length/">line length</a> before burning captions on 9:16.
+    </p>
+  </div>
+
+  <p class="cta-row">
+    <a class="btn" href="/tools/srt-time-shift/">Shift SRT by milliseconds (free)</a>
+  </p>
+
+  <SeoToolExtras
+    faqs={faqs}
+    toolName="SRT millisecond offset for lip sync"
+    toolDescription="Guide to global SubRip time shifts in milliseconds for constant lip-sync errors."
+    path="/guides/srt-offset-milliseconds-lip-sync/"
+    steps={steps}
+  />
+</BaseLayout>
+
+<style>
+  .cta-row { margin: 1.5rem 0 2rem; }
+  .prose-block table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.95rem; }
+  .prose-block th, .prose-block td { border: 1px solid #334155; padding: 0.5rem 0.75rem; text-align: left; }
+</style>

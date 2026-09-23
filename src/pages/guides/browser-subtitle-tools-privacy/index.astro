@@ -1,0 +1,176 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import SeoToolExtras from "../../../components/SeoToolExtras.astro";
+
+const faqs = [
+  {
+    question: "Do browser subtitle tools upload my SRT file?",
+    answer:
+      "Subtitle Kit runs in your browser with JavaScript. Your .srt or .vtt is read from memory on your device—we do not send subtitle content to our servers for conversion or shifting.",
+  },
+  {
+    question: "Are client-side subtitle tools safe for NDA scripts?",
+    answer:
+      "Local processing reduces exposure compared to upload-based converters. You still share metadata with your browser vendor and CDN when loading the page; for strict NDAs, use air-gapped desktop tools. For everyday freelance work, browser-local is a practical middle ground.",
+  },
+  {
+    question: "What data does Subtitle Kit collect?",
+    answer:
+      "The tools themselves do not require an account. Hosting (Cloudflare Pages) may log standard HTTP requests like any static site. See the site privacy page for details; subtitle file contents are not uploaded for processing.",
+  },
+  {
+    question: "Why not use a desktop app instead?",
+    answer:
+      "Desktop apps are great for heavy timelines. Browser tools win when you need a quick offset, text export, or line-length check on a laptop without installing software—or when IT locks down installs.",
+  },
+  {
+    question: "Can I use these tools offline?",
+    answer:
+      "You need to load the page once. After that, processing works offline in many browsers until you refresh. For fully offline workflows, save the site or use a dedicated desktop subtitle editor.",
+  },
+  {
+    question: "Is local processing slower than server conversion?",
+    answer:
+      "For typical SRT files (hundreds of cues), in-browser shifts are instant. Very large files may take a second or two—still faster than uploading to a remote API and waiting in a queue.",
+  },
+];
+
+const steps = [
+  "Pick a task: shift timing, export text, check line length, or estimate read time.",
+  "Open the matching tool on Subtitle Kit—no sign-up.",
+  "Load or paste your file; confirm nothing is sent to a server (network tab optional).",
+  "Download the result and continue in your NLE or translation CAT tool.",
+];
+---
+
+<BaseLayout
+  title="Browser subtitle tools and privacy (no upload)"
+  description="How in-browser SRT and VTT tools protect scripts on your device. Compare upload-based converters vs local JavaScript processing for editors and translators."
+  canonicalPath="/guides/browser-subtitle-tools-privacy/"
+>
+  <p class="badge">Guide · ~9 min read</p>
+  <h1>Browser subtitle tools: privacy, no upload, and when they make sense</h1>
+  <p class="lede">
+    Freelancers and creators often search for “online SRT converter” and land on pages that ask
+    you to upload a script. If your dialogue is confidential—or you simply do not want another
+    copy on someone’s disk—<strong>browser-local subtitle tools</strong> are a better default.
+    This guide explains how they work, what Subtitle Kit does, and how to choose workflows that
+    keep files on your device.
+  </p>
+
+  <div class="prose-block">
+    <h2>Upload-based vs in-browser processing</h2>
+    <p>
+      Most “free online subtitle” sites follow the same pattern: you pick a file, it travels to
+      their server, they run FFmpeg or a script, and you download the result. That is fine for
+      public YouTube clips. It is a poor fit for <strong>unreleased ads</strong>,
+      <strong>client dubs</strong>, or <strong>internal training video</strong> where the script
+      itself is sensitive.
+    </p>
+    <p>
+      <strong>In-browser tools</strong> parse SubRip or WebVTT in JavaScript inside your tab. The
+      shift, merge, or text export happens in RAM on your machine. The static site still loads
+      HTML and JS from a CDN (Cloudflare Pages in our case), but the subtitle bytes are not posted
+      to an application backend for conversion.
+    </p>
+
+    <h2>What Subtitle Kit is built for</h2>
+    <p>
+      <a href="/">Subtitle Kit</a> is a small set of focused utilities—not a full non-linear editor.
+      Each page does one job well:
+    </p>
+    <ul>
+      <li><a href="/tools/srt-time-shift/">SRT time shift</a> — global offset for sync fixes</li>
+      <li><a href="/tools/vtt-time-shift/">VTT time shift</a> — same idea for WebVTT sidecars</li>
+      <li><a href="/tools/srt-to-text/">SRT to text</a> — dialogue for translators</li>
+      <li><a href="/tools/line-length/">Line length</a> — vertical video readability</li>
+      <li><a href="/tools/read-time/">Read time</a> — voice-over planning from a script</li>
+    </ul>
+    <p>
+      Format helpers such as <a href="/tools/srt-to-vtt/">SRT to VTT</a> and
+      <a href="/tools/strip-html/">strip HTML tags</a> follow the same local-processing model.
+    </p>
+
+    <h2>Threat model (plain language)</h2>
+    <p>
+      <strong>What you reduce:</strong> accidental storage of your .srt on a random SaaS bucket,
+      retention policies you never read, and breach surface on a third-party converter.
+    </p>
+    <p>
+      <strong>What you do not eliminate:</strong> someone with access to your unlocked laptop,
+      malware on the device, or a compromised browser extension. Always lock your screen on shared
+      machines and avoid shady extensions that read page content.
+    </p>
+    <p>
+      <strong>What still touches the network:</strong> loading the tool page, analytics if you
+      add them later, and any embeds (launch badges, future ads). Read
+      <a href="/privacy/">Privacy</a> before relying on the site for regulated data.
+    </p>
+
+    <h2>How to verify “no upload” yourself</h2>
+    <ol>
+      <li>Open browser DevTools → Network tab.</li>
+      <li>Load a tool and process a test SRT.</li>
+      <li>Filter by “Fetch/XHR”—you should not see your file posted to an API endpoint.</li>
+      <li>Disconnect Wi‑Fi after the page loads; processing should still work until refresh.</li>
+    </ol>
+    <p>
+      This is the same sanity check security-minded editors use before trusting any “online” tool.
+    </p>
+
+    <h2>When to use desktop or NLE subtitles instead</h2>
+    <p>
+      Stay in Premiere, DaVinci, or Aegisub when you need per-cue ripple edits, style tracks, or
+      frame-accurate spotting across a two-hour film. Use browser utilities for
+      <strong>repeatable one-shot fixes</strong>: +500 ms after dub export, strip formatting tags
+      before translation, or check whether lines break on 9:16 safe zones.
+    </p>
+    <p>
+      Many teams combine both: spot in the NLE, export SRT, run a quick
+      <a href="/guides/shift-srt-timing-online-free/">browser shift</a>, re-import for delivery.
+    </p>
+
+    <h2>Translators and agencies</h2>
+    <p>
+      CAT tools and TMS platforms often want plain text, not timing codes. Exporting dialogue via
+      <a href="/tools/srt-to-text/">SRT to text</a> locally avoids uploading the whole script to
+      a random “SRT to TXT” site. Pair with
+      <a href="/guides/srt-to-text-for-translation/">SRT to text for translation</a> for workflow
+      tips and QA checks.
+    </p>
+
+    <h2>Short-form and vertical video</h2>
+    <p>
+      Creators shipping Reels or Shorts care about hook timing and readable line breaks. Privacy
+      still matters when early cuts contain product names or influencer deals. Local
+      <a href="/tools/line-length/">line length checks</a> and
+      <a href="/guides/subtitle-line-length-tiktok-reels/">TikTok line length guidance</a> keep
+      that pass on-device before you upload video to a platform—not your .srt to a stranger’s server.
+    </p>
+
+    <h2>Checklist before you trust any online subtitle site</h2>
+    <ul>
+      <li>Does the FAQ say files are uploaded? If yes, assume retention.</li>
+      <li>Is there a privacy policy and contact?</li>
+      <li>Can you use the tool without creating an account?</li>
+      <li>Does processing work with network disabled after load?</li>
+      <li>Is the output format correct (comma vs dot milliseconds for SRT vs VTT)?</li>
+    </ul>
+  </div>
+
+  <p class="cta-row">
+    <a class="btn" href="/">Open Subtitle Kit tools (free)</a>
+  </p>
+
+  <SeoToolExtras
+    faqs={faqs}
+    toolName="Subtitle Kit — browser subtitle tools"
+    toolDescription="Privacy-focused in-browser SRT and VTT utilities with no file upload for processing."
+    path="/guides/browser-subtitle-tools-privacy/"
+    steps={steps}
+  />
+</BaseLayout>
+
+<style>
+  .cta-row { margin: 1.5rem 0 2rem; }
+</style>
